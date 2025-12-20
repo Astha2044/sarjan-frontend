@@ -1,28 +1,105 @@
-// src/components/layout/Header.jsx
-import Link from 'next/link'
-import styles from '../../styles/Header.module.css'
+import React, { useState, useEffect } from "react";
+import styles from "../../styles/Header.module.css";
 
-export default function Header() {
+const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [activeNav, setActiveNav] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className={styles.header}>
-      <div className={styles.container}>
+    <header
+      className={`${styles.header} ${scrolled ? styles["header-scrolled"] : ""}`}
+    >
+      {/* Glass Background */}
+      <div className={styles["glass-background"]}>
+        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-1"]}`} />
+        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-2"]}`} />
+        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-3"]}`} />
+        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-4"]}`} />
+        <div className={styles["mesh-gradient"]} />
+      </div>
 
-        <Link href="/" className={styles.logo}>
-          <span>Sargan</span><em>AI</em>
-        </Link>
+      <div className={styles["gradient-border"]} />
 
-        <nav className={styles.nav}>
-          <a href="#features">Features</a>
-          <a href="#agents">Agents</a>
-          <a href="#demo">Demo</a>
+      <div className={styles["header-container"]}>
+        {/* Logo */}
+        <a href="/" className={styles["logo-link"]}>
+          <div className={styles["logo-wrapper"]}>
+            <span className={styles["logo-text"]}>
+              <span className={styles["logo-sarjan"]}>SARJAN</span>
+              <span className={styles["logo-ai"]}> Ai</span>
+            </span>
+          </div>
+        </a>
+
+        {/* Desktop Nav */}
+        <nav className={`${styles.nav} ${styles["desktop-nav"]}`}>
+          {["Features", "Agents", "Demo"].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={() => setActiveNav(item)}
+              className={`${styles["nav-link"]} ${activeNav === item ? styles["nav-link-active"] : ""
+                }`}
+            >
+              {item}
+            </a>
+          ))}
         </nav>
 
-        <div className={styles.actions}>
-          <button className={styles.login}>Login</button>
-          <button className={styles.cta}>Get Started</button>
+        {/* Desktop Actions */}
+        <div className={`${styles.actions} ${styles["desktop-actions"]}`}>
+          <button className={styles["login-btn"]}>Login</button>
+          <button className={styles["cta-btn"]}>Get Started</button>
         </div>
 
+        {/* Mobile Menu Button */}
+        <button
+          className={styles["mobile-menu-btn"]}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          <div
+            className={`${styles.hamburger} ${mobileMenuOpen ? styles["hamburger-open"] : ""
+              }`}
+          >
+            <span className={styles["hamburger-line"]} />
+            <span className={styles["hamburger-line"]} />
+            <span className={styles["hamburger-line"]} />
+          </div>
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`${styles["mobile-menu"]} ${mobileMenuOpen ? styles["mobile-menu-open"] : ""
+          }`}
+      >
+        <nav className={styles["mobile-nav"]}>
+          {["Features", "Agents", "Demo"].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              className={styles["mobile-nav-link"]}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {item}
+            </a>
+          ))}
+        </nav>
+
+        <div className={styles["mobile-actions"]}>
+          <button className={styles["mobile-login-btn"]}>Login</button>
+          <button className={styles["mobile-cta-btn"]}>Get Started</button>
+        </div>
       </div>
     </header>
-  )
-}
+  );
+};
+
+export default Header;

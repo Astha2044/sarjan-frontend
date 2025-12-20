@@ -1,7 +1,16 @@
+import Head from "next/head";
+import SarjanAIHero from "@/components/Home/HeroSection";
+
 export default function Home() {
   return (
-    <div style={{ color: 'white', fontSize: '40px', padding: '40px' }}>
-      Sargan AI Page Loaded ✅
-    </div>
-  )
+    <>
+      <Head>
+        <title>Home - Sarjan AI</title>
+        <meta name="description" content="Home - Sarjan AI" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <SarjanAIHero />
+    </>
+  );
 }
