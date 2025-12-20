@@ -11,6 +11,8 @@ import {
   FaPenNib,
   FaLightbulb,
   FaGraduationCap,
+  FaRegCopy,
+  FaRepeat,
 } from "react-icons/fa6";
 
 export default function ChatArea({
@@ -281,11 +283,21 @@ export default function ChatArea({
     );
   };
 
-  const sendMessage = async () => {
-    if (!input.trim() && !image) return;
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // Optional: Add a toast notification here
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  const sendMessage = async (textOverride = null) => {
+    const textToSend = typeof textOverride === "string" ? textOverride : input;
+    if (!textToSend.trim() && !image) return;
 
     setLoading(true);
-    const userMsg = { role: "user", content: input, img: image || null };
+    const userMsg = { role: "user", content: textToSend, img: image || null };
     const optimisticAiMsg = {
       role: "assistant",
       content: "Thinking...",
@@ -342,10 +354,10 @@ export default function ChatArea({
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const formData = new FormData();
-      formData.append("prompt", input);
+      formData.append("prompt", textToSend);
       if (image) formData.append("files", image);
       if (activeChatId) formData.append("conversationId", activeChatId);
-      const logicalTitle = input.split(/\s+/).slice(0, 3).join(" ");
+      const logicalTitle = textToSend.split(/\s+/).slice(0, 3).join(" ");
       formData.append("title", logicalTitle);
 
       const res = await axios.post(
@@ -393,6 +405,16 @@ export default function ChatArea({
   };
 
   const removeImage = () => setImage(null);
+
+  const handleRetry = () => {
+    // Find the last user message
+    const reversedMessages = [...currentMessages].reverse();
+    const lastUserMessage = reversedMessages.find((m) => m.role === "user");
+
+    if (lastUserMessage && lastUserMessage.content) {
+      sendMessage(lastUserMessage.content);
+    }
+  };
 
   // Use chatMessage (fetched detailed view) or fallback to chat (prop from history) or empty
   // Handle nested 'data' if the API wraps the response.
@@ -494,22 +516,19 @@ export default function ChatArea({
           return (
             <div
               key={i}
-              className={`${styles.messageWrapper} ${
-                isUser ? styles.userWrapper : styles.aiWrapper
-              }`}
+              className={`${styles.messageWrapper} ${isUser ? styles.userWrapper : styles.aiWrapper
+                }`}
             >
               <div
-                className={`${styles.avatar} ${
-                  isUser ? styles.userAvatar : styles.aiAvatar
-                }`}
+                className={`${styles.avatar} ${isUser ? styles.userAvatar : styles.aiAvatar
+                  }`}
               >
                 {isUser ? <FaUser /> : <FaRobot />}
               </div>
 
               <div
-                className={`${styles.messageBubble} ${
-                  isUser ? styles.userBubble : styles.aiBubble
-                }`}
+                className={`${styles.messageBubble} ${isUser ? styles.userBubble : styles.aiBubble
+                  }`}
               >
                 {msg.img && (
                   <div className={styles.msgImgWrapper}>
@@ -534,6 +553,29 @@ export default function ChatArea({
                         <ThinkingBlock thoughts={msg.thoughts} />
                       ) : (
                         <ReactMarkdown>{msg.content || msg.text}</ReactMarkdown>
+                      )}
+                      {!msg.isThinking && (
+                        <div className={styles.messageActions}>
+                          <button
+                            className={styles.actionBtn}
+                            onClick={() =>
+                              copyToClipboard(msg.content || msg.text)
+                            }
+                            title="Copy to clipboard"
+                          >
+                            <FaRegCopy />
+                          </button>
+                          {i === currentMessages.length - 1 && (
+                            <button
+                              className={styles.actionBtn}
+                              onClick={handleRetry}
+                              title="Regenerate response"
+                              disabled={loading}
+                            >
+                              <FaRepeat />
+                            </button>
+                          )}
+                        </div>
                       )}
                     </>
                   )}
