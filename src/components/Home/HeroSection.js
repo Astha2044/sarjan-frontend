@@ -59,7 +59,7 @@ const HeroSection = () => {
         const waves = [
             { amplitude: 30, frequency: 0.02, speed: 0.015, offset: 0, color: 'rgba(94, 234, 212, 0.08)' },
             { amplitude: 40, frequency: 0.015, speed: 0.012, offset: 100, color: 'rgba(168, 85, 247, 0.06)' },
-            { amplitude: 25, frequency: 0.025, speed: 0.018, offset: 200, color: 'rgba(59, 130, 246, 0.04)' }
+            { amplitude: 25, frequency: 0.025, speed: 0.018, offset: 200, color: 'rgba(94, 234, 212, 0.18)' }
         ];
 
         const drawWave = (wave, mouseInfluence) => {

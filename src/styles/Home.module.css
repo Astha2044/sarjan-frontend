@@ -269,6 +269,9 @@
   margin: 0;
   letter-spacing: -0.02em;
   line-height: 1;
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.12em;
+  font-weight: 300 / 400;
 }
 
 .sarjan {
@@ -1277,4 +1280,32 @@
   .cursorGlow {
     display: none;
   }
+}
+
+.brandName {
+  font-family: "Inter", sans-serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.28em; /* THIS creates logo look */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* SARJAN text */
+.sarjan {
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.15),
+    0 0 40px rgba(255, 255, 255, 0.08);
+}
+
+/* AI text */
+.ai {
+  text-transform: uppercase;
+  color: #5eead4;
+  letter-spacing: 0.18em;
+  margin-left: 0.25em;
+  text-shadow: 0 0 20px rgba(94, 234, 212, 0.6),
+    0 0 40px rgba(94, 234, 212, 0.35);
 }
