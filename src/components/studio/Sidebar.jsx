@@ -16,11 +16,11 @@ export default function Sidebar({
       <div className={styles.history}>
         {chats.map(chat => (
           <div
-            key={chat.id}
+            key={chat._id}
             className={`${styles.chatItem} ${
-              activeChat === chat.id ? styles.active : ''
+              activeChat === chat._id ? styles.active : ''
             }`}
-            onClick={() => setActiveChat(chat.id)}
+            onClick={() => setActiveChat(chat._id)}
           >
             {chat.title}
           </div>

@@ -1,38 +1,65 @@
-import { useState } from 'react'
-import Sidebar from '@/components/studio/Sidebar'
-import ChatArea from '@/components/studio/ChatArea'
-import styles from '../styles/Studio.module.css'
+import { useState, useEffect } from "react";
+import Sidebar from "@/components/studio/Sidebar";
+import ChatArea from "@/components/studio/ChatArea";
+import styles from "../styles/Studio.module.css";
+import axios from "axios";
 
 export default function Studio() {
-  const [chats, setChats] = useState([])
-  const [activeChat, setActiveChat] = useState(null)
+  const [chats, setChats] = useState([]);
+  console.log('123: ', chats);
+  const [activeChatId, setActiveChatId] = useState(null);
+  console.log('activeChatId: ', activeChatId);
 
-  const createNewChat = () => {
-    const newChat = {
-      id: Date.now(),
-      title: 'New Creative Session',
-      messages: []
-    }
-    setChats([newChat, ...chats])
-    setActiveChat(newChat.id)
-  }
+  // 🔹 Fetch chat history
+  const fetchChats = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  const activeChatData = chats.find(c => c.id === activeChat)
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/chat/history`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+    console.log("res: ", res);
+
+    setChats(res?.data?.data?.conversations ?? []);
+  };
+
+  // 🔹 First time new chat
+  const createNewChat = async () => {
+    const tempChat = {
+      id: null,
+      title: "New Chat",
+      messages: [],
+    };
+
+    setChats((prev) => [tempChat, ...prev]);
+    setActiveChatId(null);
+
+    // 🔥 Now load actual chats
+    await fetchChats();
+  };
+
+  const activeChat = chats?.find((c) => c._id === activeChatId);
+  console.log('activeChat: ', activeChat);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchChats();
+  }, []);
 
   return (
     <div className={styles.studio}>
       <Sidebar
         chats={chats}
-        activeChat={activeChat}
-        setActiveChat={setActiveChat}
+        activeChat={activeChatId}
+        setActiveChat={setActiveChatId}
         onNewChat={createNewChat}
       />
 
-      <ChatArea
-        chat={activeChatData}
-        setChats={setChats}
-        chats={chats}
-      />
+      <ChatArea chat={activeChat} activeChatId={activeChatId} setChats={setChats} chats={chats} />
     </div>
-  )
+  );
 }
