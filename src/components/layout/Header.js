@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/Header.module.css";
 
+import RegisterModal from "../auth/RegisterModal";
+import LoginModal from "../auth/LoginModal";
+
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeNav, setActiveNav] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -14,14 +19,24 @@ const Header = () => {
 
   return (
     <header
-      className={`${styles.header} ${scrolled ? styles["header-scrolled"] : ""}`}
+      className={`${styles.header} ${
+        scrolled ? styles["header-scrolled"] : ""
+      }`}
     >
       {/* Glass Background */}
       <div className={styles["glass-background"]}>
-        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-1"]}`} />
-        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-2"]}`} />
-        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-3"]}`} />
-        <div className={`${styles["liquid-blob"]} ${styles["liquid-blob-4"]}`} />
+        <div
+          className={`${styles["liquid-blob"]} ${styles["liquid-blob-1"]}`}
+        />
+        <div
+          className={`${styles["liquid-blob"]} ${styles["liquid-blob-2"]}`}
+        />
+        <div
+          className={`${styles["liquid-blob"]} ${styles["liquid-blob-3"]}`}
+        />
+        <div
+          className={`${styles["liquid-blob"]} ${styles["liquid-blob-4"]}`}
+        />
         <div className={styles["mesh-gradient"]} />
       </div>
 
@@ -45,8 +60,9 @@ const Header = () => {
               key={item}
               href={`#${item.toLowerCase()}`}
               onClick={() => setActiveNav(item)}
-              className={`${styles["nav-link"]} ${activeNav === item ? styles["nav-link-active"] : ""
-                }`}
+              className={`${styles["nav-link"]} ${
+                activeNav === item ? styles["nav-link-active"] : ""
+              }`}
             >
               {item}
             </a>
@@ -55,8 +71,13 @@ const Header = () => {
 
         {/* Desktop Actions */}
         <div className={`${styles.actions} ${styles["desktop-actions"]}`}>
-          <button className={styles["login-btn"]}>Login</button>
-          <button className={styles["cta-btn"]}>Get Started</button>
+          <button className={styles["login-btn"]}  onClick={() => setOpenLogin(true)}>Login</button>
+          <button
+            className={styles["cta-btn"]}
+            onClick={() => setOpenRegister(true)}
+          >
+            Get Started
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -65,8 +86,9 @@ const Header = () => {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <div
-            className={`${styles.hamburger} ${mobileMenuOpen ? styles["hamburger-open"] : ""
-              }`}
+            className={`${styles.hamburger} ${
+              mobileMenuOpen ? styles["hamburger-open"] : ""
+            }`}
           >
             <span className={styles["hamburger-line"]} />
             <span className={styles["hamburger-line"]} />
@@ -77,8 +99,9 @@ const Header = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`${styles["mobile-menu"]} ${mobileMenuOpen ? styles["mobile-menu-open"] : ""
-          }`}
+        className={`${styles["mobile-menu"]} ${
+          mobileMenuOpen ? styles["mobile-menu-open"] : ""
+        }`}
       >
         <nav className={styles["mobile-nav"]}>
           {["Features", "Agents", "Demo"].map((item) => (
@@ -98,6 +121,15 @@ const Header = () => {
           <button className={styles["mobile-cta-btn"]}>Get Started</button>
         </div>
       </div>
+
+      <RegisterModal
+        open={openRegister}
+        onClose={() => setOpenRegister(false)}
+      />
+      <LoginModal
+        open={openLogin}
+        onClose={() => setOpenLogin(false)}
+      />
     </header>
   );
 };

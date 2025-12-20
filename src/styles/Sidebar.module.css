@@ -1,0 +1,78 @@
+.sidebar {
+  width: 260px;
+  background: #11141c;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+.newChat {
+  background: #1f2937;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.history {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chatItem {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.chatItem:hover {
+  background: #1f2937;
+  opacity: 1;
+}
+
+.active {
+  background: linear-gradient(135deg, #00f6ff33, #8b5cf633);
+  opacity: 1;
+}
+
+
+.user {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 12px;
+}
+
+.userInfo {
+  cursor: pointer;
+}
+
+.userInfo p {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.menu {
+  margin-top: 8px;
+  background: #1f2937;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.menu p {
+  padding: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.menu p:hover {
+  background: #111827;
+}
+
+.logout {
+  color: #ef4444;
+}
