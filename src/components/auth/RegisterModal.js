@@ -34,7 +34,6 @@ const RegisterModal = ({ open, onClose }) => {
         }
       );
 
-      console.log("res: ", res);
 
       // ✅ SAME AS LOGIN
       localStorage.setItem("user", JSON.stringify(res.data?.data));
