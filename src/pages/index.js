@@ -2,6 +2,7 @@ import Head from "next/head";
 import SarjanAIHero from "@/components/Home/HeroSection";
 import FlowPage from "@/components/OurFlow/flow";
 import WhySarjanAI from "@/components/why choose us/about";
+import ExamplesSection from "@/components/Example/ExamplesSection";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
       <SarjanAIHero />
       <FlowPage />
       <WhySarjanAI />
+      <ExamplesSection />
     </>
   );
 }

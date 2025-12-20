@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../../styles/Header.module.css";
 
 import RegisterModal from "../auth/RegisterModal";
@@ -10,6 +10,31 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  const headerRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        mobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target) &&
+        headerRef.current &&
+        !headerRef.current.contains(event.target)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -19,9 +44,8 @@ const Header = () => {
 
   return (
     <header
-      className={`${styles.header} ${
-        scrolled ? styles["header-scrolled"] : ""
-      }`}
+      ref={headerRef} className={`${styles.header} ${scrolled ? styles["header-scrolled"] : ""
+        }`}
     >
       {/* Glass Background */}
       <div className={styles["glass-background"]}>
@@ -46,10 +70,11 @@ const Header = () => {
         {/* Logo */}
         <a href="/" className={styles["logo-link"]}>
           <div className={styles["logo-wrapper"]}>
-            <span className={styles["logo-text"]}>
-              <span className={styles["logo-sarjan"]}>SARJAN</span>
-              <span className={styles["logo-ai"]}> Ai</span>
-            </span>
+            <img
+              src="/images/sarjan.png"
+              alt="Sarjan AI"
+              className={styles.logoImage}
+            />
           </div>
         </a>
 
@@ -60,9 +85,8 @@ const Header = () => {
               key={item}
               href={`#${item.toLowerCase()}`}
               onClick={() => setActiveNav(item)}
-              className={`${styles["nav-link"]} ${
-                activeNav === item ? styles["nav-link-active"] : ""
-              }`}
+              className={`${styles["nav-link"]} ${activeNav === item ? styles["nav-link-active"] : ""
+                }`}
             >
               {item}
             </a>
@@ -71,7 +95,7 @@ const Header = () => {
 
         {/* Desktop Actions */}
         <div className={`${styles.actions} ${styles["desktop-actions"]}`}>
-          <button className={styles["login-btn"]}  onClick={() => setOpenLogin(true)}>Login</button>
+          <button className={styles["login-btn"]} onClick={() => setOpenLogin(true)}>Login</button>
           <button
             className={styles["cta-btn"]}
             onClick={() => setOpenRegister(true)}
@@ -86,9 +110,8 @@ const Header = () => {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <div
-            className={`${styles.hamburger} ${
-              mobileMenuOpen ? styles["hamburger-open"] : ""
-            }`}
+            className={`${styles.hamburger} ${mobileMenuOpen ? styles["hamburger-open"] : ""
+              }`}
           >
             <span className={styles["hamburger-line"]} />
             <span className={styles["hamburger-line"]} />
@@ -99,9 +122,9 @@ const Header = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`${styles["mobile-menu"]} ${
-          mobileMenuOpen ? styles["mobile-menu-open"] : ""
-        }`}
+        ref={mobileMenuRef}
+        className={`${styles["mobile-menu"]} ${mobileMenuOpen ? styles["mobile-menu-open"] : ""
+          }`}
       >
         <nav className={styles["mobile-nav"]}>
           {["Features", "Agents", "Demo"].map((item) => (
