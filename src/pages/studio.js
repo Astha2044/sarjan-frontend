@@ -29,17 +29,7 @@ export default function Studio() {
 
   // 🔹 First time new chat
   const createNewChat = async () => {
-    const tempChat = {
-      id: null,
-      title: "New Chat",
-      messages: [],
-    };
-
-    setChats((prev) => [tempChat, ...prev]);
     setActiveChatId(null);
-
-    // 🔥 Now load actual chats
-    await fetchChats();
   };
 
   const activeChat = chats?.find((c) => c._id === activeChatId);
@@ -59,7 +49,14 @@ export default function Studio() {
         onNewChat={createNewChat}
       />
 
-      <ChatArea chat={activeChat} activeChatId={activeChatId} setChats={setChats} chats={chats} />
+      <ChatArea
+        chat={activeChat}
+        activeChatId={activeChatId}
+        setChats={setChats}
+        chats={chats}
+        refreshHistory={fetchChats}
+        setActiveChatId={setActiveChatId}
+      />
     </div>
   );
 }

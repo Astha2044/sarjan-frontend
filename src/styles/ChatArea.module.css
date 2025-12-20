@@ -172,3 +172,54 @@
   font-size: 18px;
   opacity: 0.6;
 }
+
+/* Thinking Dropdown */
+.thinkingWrapper {
+  margin-bottom: 8px;
+}
+
+.thinkingToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #ccc;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.thinkingToggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.thinkingChevron {
+  transition: transform 0.2s;
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+.thinkingChevron.open {
+  transform: rotate(90deg);
+}
+
+.thinkingContent {
+  margin-top: 8px;
+  padding: 10px;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+  margin-left: 4px;
+  font-size: 0.85em;
+  color: #aaa;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 8px 8px 8px;
+  animation: slideDown 0.2s;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
