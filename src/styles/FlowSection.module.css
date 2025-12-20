@@ -1,0 +1,248 @@
+/* ===============================
+   BASE
+================================ */
+.wrapper {
+  background: radial-gradient(
+      circle at top,
+      rgba(59, 130, 246, 0.08),
+      transparent 50%
+    ),
+    #050816;
+  padding: 60px 0 80px;
+  overflow: hidden;
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ===============================
+   HEADER
+================================ */
+.header {
+  max-width: 720px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  color: rgba(94, 234, 212, 0.85);
+}
+
+.header h2 {
+  font-size: clamp(3rem, 5vw, 3rem);
+  margin: 14px 0;
+}
+
+.header p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(209, 250, 243, 0.9);
+}
+
+/* ===============================
+   FLOW
+================================ */
+.flow {
+  position: relative;
+  max-width: 1100px;
+  margin: auto;
+  height: 120vh; /* reduced from 150 */
+}
+
+/* ===============================
+   SPINE
+================================ */
+.spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(94, 234, 212, 0.85),
+    transparent
+  );
+  transform: translateX(-50%);
+}
+
+/* ===============================
+   ROW
+================================ */
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: calc(120vh / 6); /* tighter spacing */
+}
+
+.left {
+  justify-content: flex-end;
+  padding-right: 72px;
+}
+
+.right {
+  justify-content: flex-start;
+  padding-left: 72px;
+}
+
+/* ===============================
+   CONNECTOR
+================================ */
+.line {
+  position: absolute;
+  top: 50%;
+  width: 72px;
+  height: 2px;
+  background: rgba(94, 234, 212, 0.6);
+}
+
+.left .line {
+  left: 50%;
+}
+
+.right .line {
+  right: 50%;
+}
+
+/* ===============================
+   CARD
+================================ */
+.card {
+  width: 340px;
+  padding: 28px;
+  border-radius: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 80px rgba(94, 234, 212, 0.25);
+}
+
+/* ===============================
+   ICON
+================================ */
+.icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+/* ===============================
+   TEXT
+================================ */
+.card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+
+.card p {
+  font-size: 0.92rem;
+  color: rgba(209, 250, 243, 0.9);
+  line-height: 1.65;
+}
+
+/* ===============================
+   TABLET
+================================ */
+@media (max-width: 1024px) {
+  .flow {
+    height: auto;
+  }
+
+  .row {
+    height: auto;
+    margin-bottom: 64px;
+  }
+
+  .left,
+  .right {
+    padding: 0 40px;
+  }
+}
+
+/* ===============================
+   MOBILE — FINAL FIX (CLEAN)
+================================ */
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 80px 0 60px;
+  }
+
+  .header {
+    margin-bottom: 56px;
+    padding: 0 16px;
+  }
+
+  .header h2 {
+    font-size: 3rem;
+  }
+
+  .header p {
+    font-size: 0.95rem;
+  }
+
+  /* FLOW */
+  .flow {
+    height: auto;
+    padding: 0 16px;
+  }
+
+  /* SINGLE VERTICAL SPINE */
+  .spine {
+    left: 20px;
+    transform: none;
+    display: block;
+  }
+
+  /* ROW */
+  .row {
+    flex-direction: row;
+    align-items: flex-start;
+    height: auto;
+    margin-bottom: 48px;
+  }
+
+  /* REMOVE LEFT / RIGHT BEHAVIOR */
+  .left,
+  .right {
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  /* 🔥 IMPORTANT: REMOVE PER-ROW LINES */
+  .line {
+    display: none;
+  }
+
+  /* CARD */
+  .card {
+    width: 100%;
+    margin-left: 48px; /* space from spine */
+    padding: 22px;
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+  }
+}

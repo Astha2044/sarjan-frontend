@@ -1,59 +1,163 @@
-import React from "react";
+// Footer.js
+import React, { useState } from "react";
 import styles from "../../styles/Footer.module.css";
+import { FaTelegramPlane, FaInstagram, FaTwitter, FaGithub, FaLinkedin } from "react-icons/fa";
+
 
 const Footer = () => {
+  const [hoveredChar, setHoveredChar] = useState(null);
   const year = new Date().getFullYear();
+
+  const mainLinks = [
+    "Product",
+    "Pricing",
+    "About Us",
+    "Contact",
+  ];
 
   return (
     <footer className={styles.footer}>
-      {/* Background */}
-      <div className={styles["footer-glass-background"]}>
-        <div className={`${styles["footer-liquid-blob"]} ${styles["footer-liquid-blob-1"]}`} />
-        <div className={`${styles["footer-liquid-blob"]} ${styles["footer-liquid-blob-2"]}`} />
-        <div className={`${styles["footer-liquid-blob"]} ${styles["footer-liquid-blob-3"]}`} />
-        <div className={`${styles["footer-liquid-blob"]} ${styles["footer-liquid-blob-4"]}`} />
-        <div className={styles["footer-mesh-gradient"]} />
+      {/* Backgrounds */}
+      <div className={styles.backgroundGrid} />
+      <div className={styles.particlesContainer}>
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className={styles.particle}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${10 + Math.random() * 20}s`,
+            }}
+          />
+        ))}
       </div>
 
-      <div className={styles["footer-gradient-border"]} />
+      <div className={styles.orbsContainer}>
+        <div className={`${styles.orb} ${styles.orb1}`} />
+        <div className={`${styles.orb} ${styles.orb2}`} />
+        <div className={`${styles.orb} ${styles.orb3}`} />
+      </div>
 
-      <div className={styles["footer-container"]}>
-        {/* Brand */}
-        <div className={styles["footer-brand"]}>
-          <div className={styles["footer-logo-wrapper"]}>
-            <span className={styles["footer-logo-text"]}>
-              <span className={styles["logo-sarjan"]}>SARJAN</span>
-              <span className={styles["logo-ai"]}> Ai</span>
-            </span>
+      <div className={styles.topBorder} />
+
+      {/* Main Content */}
+      <div className={styles.mainContent}>
+        <div className={styles.contentGrid}>
+          {/* LEFT — BRAND */}
+          <div className={styles.brandSection}>
+            <div className={styles.logoWrapper}>
+              <div className={styles.logoContainer}>
+                <img
+                  src="/Sarjan_Logo.png"
+                  alt="Sarjan AI"
+                  className={styles.logoImage}
+                />
+                <div className={styles.logoGlow} />
+                <span className={styles.logoText}>SARJAN AI</span>
+              </div>
+            </div>
+
+            <p className={styles.brandTagline}>
+              Where ideas think together. Empowering innovation through
+              intelligent collaboration.
+            </p>
+
+            {/* <div className={styles.socialLinks}>
+              <a href="#" className={styles.socialButton} aria-label="Telegram">
+                <div className={styles.socialGradient} />
+                <FaTelegramPlane className={styles.socialIcon} />
+                <div className={styles.socialGlow} />
+              </a>
+
+              <a href="#" className={styles.socialButton} aria-label="Instagram">
+                <div className={styles.socialGradient} />
+                <FaInstagram className={styles.socialIcon} />
+                <div className={styles.socialGlow} />
+              </a>
+
+              <a href="#" className={styles.socialButton} aria-label="Twitter">
+                <div className={styles.socialGradient} />
+                <FaTwitter className={styles.socialIcon} />
+                <div className={styles.socialGlow} />
+              </a>
+
+              <a href="#" className={styles.socialButton} aria-label="GitHub">
+                <div className={styles.socialGradient} />
+                <FaGithub className={styles.socialIcon} />
+                <div className={styles.socialGlow} />
+              </a>
+
+              <a href="#" className={styles.socialButton} aria-label="LinkedIn">
+                <div className={styles.socialGradient} />
+                <FaLinkedin className={styles.socialIcon} />
+                <div className={styles.socialGlow} />
+              </a>
+            </div> */}
           </div>
 
-          <p className={styles["footer-tagline"]}>
-            Where ideas think together.
-          </p>
+          {/* RIGHT — SIMPLE LINKS */}
+          <div className={styles.simpleLinks}>
+            <h4 className={styles.simpleHeading}>Explore</h4>
+
+            <ul className={styles.simpleList}>
+              {mainLinks.map((link) => (
+                <li key={link}>
+                  <a href="#" className={styles.simpleLink}>
+                    {link}
+                    <span className={styles.linkUnderline} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+{/* 
+            <p className={styles.linksNote}>
+              A privacy-first AI platform designed for modern teams and
+              intelligent workflows.
+            </p> */}
+          </div>
         </div>
 
-        {/* Links */}
-        <div className={styles["footer-links-container"]}>
-          {["Product", "Company", "Legal", "Resources"].map((title) => (
-            <div key={title} className={styles["footer-link-column"]}>
-              <h4 className={styles["footer-link-heading"]}>{title}</h4>
-              <a className={styles["footer-link"]}>Link 1</a>
-              <a className={styles["footer-link"]}>Link 2</a>
-              <a className={styles["footer-link"]}>Link 3</a>
+        {/* SIGNATURE */}
+        <div className={styles.signatureSection}>
+          <div className={styles.signatureText}>
+            {["S", "A", "R", "J", "A", "N"].map((char, i) => (
+              <span
+                key={i}
+                className={`${styles.signatureChar} ${hoveredChar === i ? styles.signatureCharHovered : ""
+                  }`}
+                onMouseEnter={() => setHoveredChar(i)}
+                onMouseLeave={() => setHoveredChar(null)}
+              >
+                {char}
+                <span className={styles.signatureCharGlow} />
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* BOTTOM BAR */}
+        <div className={styles.bottomBar}>
+          <div className={styles.bottomContent}>
+            <p className={styles.copyright}>
+              © {year} Sarjan AI. All rights reserved.
+            </p>
+
+            <div className={styles.bottomLinks}>
+              <a href="#" className={styles.bottomLink}>
+                Privacy Policy
+              </a>
+              <span className={styles.separator}>•</span>
+              <a href="#" className={styles.bottomLink}>
+                Terms of Service
+              </a>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Bottom */}
-      <div className={styles["footer-bottom-bar"]}>
-        <div className={styles["footer-bottom-content"]}>
-          <p className={styles["footer-copyright"]}>
-            © {year} Sarjan AI
-          </p>
-          <p className={styles["footer-made-with"]}>
-            Made with <span className={styles["footer-heart"]}>♥</span>
-          </p>
+            <p className={styles.madeWith}>
+              Made with <span className={styles.heart}>♥</span> by Sarjan AI Team
+            </p>
+          </div>
         </div>
       </div>
     </footer>

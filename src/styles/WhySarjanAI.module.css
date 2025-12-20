@@ -1,0 +1,161 @@
+/* ===============================
+   FOUNDATION
+================================ */
+.wrapper {
+  position: relative;
+  background: radial-gradient(
+      circle at 30% 20%,
+      rgba(94, 234, 212, 0.18),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 70% 80%,
+      rgba(45, 212, 191, 0.15),
+      transparent 50%
+    ),
+    #020617;
+  padding: 50px 0;
+  color: #ffffff;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 24px;
+}
+
+/* ===============================
+   HEADER
+================================ */
+.header {
+  text-align: center;
+  margin-bottom: 120px;
+}
+
+.label {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: rgba(94, 234, 212, 0.85);
+}
+
+.header h2 {
+  font-size: clamp(3rem, 4vw, 4.4rem);
+  font-weight: 600;
+  margin: 22px 0;
+}
+
+.header p {
+  max-width: 640px;
+  margin: auto;
+  color: rgba(209, 250, 243, 0.9);
+  font-size: 1.05rem;
+}
+
+/* ===============================
+   GRID
+================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+}
+
+/* ===============================
+   CARD
+================================ */
+.card {
+  position: relative;
+  padding: 48px 40px;
+  border-radius: 34px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.015)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease,
+    border-color 0.6s ease;
+  overflow: hidden;
+}
+
+/* Ambient glow */
+.glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    circle,
+    rgba(94, 234, 212, 0.35),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.card:hover .glow {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-18px) scale(1.03);
+  border-color: rgba(94, 234, 212, 0.65);
+  box-shadow: 0 60px 160px rgba(94, 234, 212, 0.18);
+}
+
+/* ===============================
+   ICON
+================================ */
+.icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+/* ===============================
+   TEXT
+================================ */
+.card h3 {
+  font-size: 1.45rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.card p {
+  color: rgba(209, 250, 243, 0.9);
+  line-height: 1.75;
+  font-size: 0.98rem;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 140px 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    margin-bottom: 80px;
+  }
+
+  .card {
+    padding: 40px 32px;
+  }
+}
