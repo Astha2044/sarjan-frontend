@@ -21,6 +21,22 @@
 }
 
 
+.logoWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  filter: drop-shadow(0 4px 12px rgba(94, 234, 213, 0.158));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+
 .eyeIcon {
   position: absolute;
   right: 12px;
@@ -89,4 +105,29 @@
   font-size: 1.3rem;
   color: #fff;
   cursor: pointer;
+}
+
+
+.switchAuth {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
+.switchAuth span {
+  margin-right: 6px;
+}
+
+.switchAuth button {
+  background: none;
+  border: none;
+  color: #5eead4;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.switchAuth button:hover {
+  text-decoration: underline;
 }

@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-html-link-for-pages */
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../styles/Header.module.css";
 
@@ -35,7 +37,6 @@ const Header = () => {
     };
   }, [mobileMenuOpen]);
 
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
@@ -44,8 +45,10 @@ const Header = () => {
 
   return (
     <header
-      ref={headerRef} className={`${styles.header} ${scrolled ? styles["header-scrolled"] : ""
-        }`}
+      ref={headerRef}
+      className={`${styles.header} ${
+        scrolled ? styles["header-scrolled"] : ""
+      }`}
     >
       {/* Glass Background */}
       <div className={styles["glass-background"]}>
@@ -81,21 +84,27 @@ const Header = () => {
         {/* Desktop Nav */}
         <nav className={`${styles.nav} ${styles["desktop-nav"]}`}>
           {["Home", "Our Flow", "About", "Example"].map((item) => (
-            <a
-              key={item}
+              <a
+                key={item}
               href={`#${item.toLowerCase()}`}
-              onClick={() => setActiveNav(item)}
-              className={`${styles["nav-link"]} ${activeNav === item ? styles["nav-link-active"] : ""
+                onClick={() => setActiveNav(item)}
+                className={`${styles["nav-link"]} ${
+                  activeNav === item ? styles["nav-link-active"] : ""
                 }`}
-            >
-              {item}
-            </a>
+              >
+                {item}
+              </a>
           ))}
         </nav>
 
         {/* Desktop Actions */}
         <div className={`${styles.actions} ${styles["desktop-actions"]}`}>
-          <button className={styles["login-btn"]} onClick={() => setOpenLogin(true)}>Login</button>
+          <button
+            className={styles["login-btn"]}
+            onClick={() => setOpenLogin(true)}
+          >
+            Login
+          </button>
           <button
             className={styles["cta-btn"]}
             onClick={() => setOpenRegister(true)}
@@ -110,8 +119,9 @@ const Header = () => {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <div
-            className={`${styles.hamburger} ${mobileMenuOpen ? styles["hamburger-open"] : ""
-              }`}
+            className={`${styles.hamburger} ${
+              mobileMenuOpen ? styles["hamburger-open"] : ""
+            }`}
           >
             <span className={styles["hamburger-line"]} />
             <span className={styles["hamburger-line"]} />
@@ -123,8 +133,9 @@ const Header = () => {
       {/* Mobile Menu */}
       <div
         ref={mobileMenuRef}
-        className={`${styles["mobile-menu"]} ${mobileMenuOpen ? styles["mobile-menu-open"] : ""
-          }`}
+        className={`${styles["mobile-menu"]} ${
+          mobileMenuOpen ? styles["mobile-menu-open"] : ""
+        }`}
       >
         <nav className={styles["mobile-nav"]}>
           {["Features", "Agents", "Demo"].map((item) => (
@@ -152,6 +163,7 @@ const Header = () => {
       <LoginModal
         open={openLogin}
         onClose={() => setOpenLogin(false)}
+        onOpenRegister={() => setOpenRegister(true)}
       />
     </header>
   );

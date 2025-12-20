@@ -1,11 +1,26 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "../../styles/ChatArea.module.css";
 import ReactMarkdown from "react-markdown";
 import { io } from "socket.io-client";
-import { FaUser, FaRobot, FaCode, FaPenNib, FaLightbulb, FaGraduationCap } from "react-icons/fa6";
+import {
+  FaUser,
+  FaRobot,
+  FaCode,
+  FaPenNib,
+  FaLightbulb,
+  FaGraduationCap,
+} from "react-icons/fa6";
 
-export default function ChatArea({ chat, activeChatId, chats, setChats, refreshHistory, setActiveChatId }) {
+export default function ChatArea({
+  chat,
+  activeChatId,
+  chats,
+  setChats,
+  refreshHistory,
+  setActiveChatId,
+}) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
@@ -13,6 +28,8 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
   const messagesEndRef = useRef(null);
   const socketRef = useRef(null);
   const responseTimeoutRef = useRef(null);
+
+  const socketReadyRef = useRef(false);
 
   const clearResponseTimeout = () => {
     if (responseTimeoutRef.current) {
@@ -33,12 +50,9 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
       const user = JSON.parse(localStorage.getItem("user"));
       const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/chat/${id}`;
       console.log("Fetching chat details from:", url);
-      const res = await axios.get(
-        url,
-        {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }
-      );
+      const res = await axios.get(url, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
       console.log("Chat details response:", res.data);
       // Attempt to find messages in common locations if direct path fails, or just log for now to see structure.
       // If the structure is res.data.data, we should adjust.
@@ -55,12 +69,15 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
     if (!user?.token) return;
 
     // Connect Once
-    console.log("Using token for socket:", user.token?.substring(0, 10) + "...");
+    console.log(
+      "Using token for socket:",
+      user.token?.substring(0, 10) + "..."
+    );
 
     // Remove strict transport forcing to allow polling -> upgrade (more robust)
     const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
       auth: {
-        token: user.token
+        token: user.token,
       },
       // transports: ["polling", "websocket"], // Let default happen
       // withCredentials: true,
@@ -69,7 +86,8 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      console.log("✅ Socket connected successfully. ID:", socket.id);
+      console.log("✅ Socket connected:", socket.id);
+      socketReadyRef.current = true;
     });
 
     socket.on("disconnect", (reason) => {
@@ -113,21 +131,24 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
 
       setChatMessage((prev) => {
         const isNested = !!prev?.data?.messages;
-        const msgList = isNested ? prev.data.messages : (prev?.messages || []);
+        const msgList = isNested ? prev.data.messages : prev?.messages || [];
 
         const lastMsg = msgList[msgList.length - 1];
         let newMsgList = [...msgList];
 
-        if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
+        if (
+          lastMsg &&
+          (lastMsg.role === "assistant" || lastMsg.role === "ai")
+        ) {
           // Append to thoughts array
           const currentThoughts = lastMsg.thoughts || [];
 
           let stepTitle = step;
-          if (step === 'ideas') stepTitle = "Generating Ideas";
-          if (step === 'critiques') stepTitle = "Critiquing Content";
-          if (step === 'refined_ideas') stepTitle = "Refining Output";
-          if (step === 'final_output') stepTitle = "Finalizing";
-          if (step === 'image_gen') stepTitle = "Creating Image";
+          if (step === "ideas") stepTitle = "Generating Ideas";
+          if (step === "critiques") stepTitle = "Critiquing Content";
+          if (step === "refined_ideas") stepTitle = "Refining Output";
+          if (step === "final_output") stepTitle = "Finalizing";
+          if (step === "image_gen") stepTitle = "Creating Image";
 
           const newThought = { step: stepTitle, content: content };
 
@@ -135,7 +156,7 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
             ...lastMsg,
             content: "Thinking...",
             thoughts: [...currentThoughts, newThought],
-            isThinking: true
+            isThinking: true,
           };
           newMsgList[newMsgList.length - 1] = updatedMsg;
         } else {
@@ -143,7 +164,7 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
             role: "assistant",
             content: "Thinking...",
             thoughts: [{ step: step, content: content }],
-            isThinking: true
+            isThinking: true,
           });
         }
 
@@ -162,14 +183,20 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
         const aiMessage = response.data.aiMessage;
         setChatMessage((prev) => {
           const isNested = !!prev?.data?.messages;
-          const msgList = isNested ? prev.data.messages : (prev?.messages || []);
+          const msgList = isNested ? prev.data.messages : prev?.messages || [];
           let newMsgList = [...msgList];
           const lastMsg = msgList[msgList.length - 1];
 
           // Replace the last "thinking" message with the final one
-          if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
+          if (
+            lastMsg &&
+            (lastMsg.role === "assistant" || lastMsg.role === "ai")
+          ) {
             // Remove thoughts, just show final content
-            newMsgList[newMsgList.length - 1] = { ...aiMessage, isThinking: false };
+            newMsgList[newMsgList.length - 1] = {
+              ...aiMessage,
+              isThinking: false,
+            };
           } else {
             newMsgList.push(aiMessage);
           }
@@ -225,16 +252,27 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
 
     return (
       <div className={styles.thinkingWrapper}>
-        <div className={styles.thinkingToggle} onClick={() => setIsOpen(!isOpen)}>
-          <span className={`${styles.thinkingChevron} ${isOpen ? styles.open : ''}`}>▶</span>
+        <div
+          className={styles.thinkingToggle}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span
+            className={`${styles.thinkingChevron} ${isOpen ? styles.open : ""}`}
+          >
+            ▶
+          </span>
           <span>{displayStep}...</span>
         </div>
         {isOpen && (
           <div className={styles.thinkingContent}>
             {thoughts.map((t, idx) => (
-              <div key={idx} style={{ marginBottom: '8px' }}>
+              <div key={idx} style={{ marginBottom: "8px" }}>
                 <strong>{t.step}:</strong>
-                <div style={{ marginTop: '4px', whiteSpace: 'pre-wrap' }}>{typeof t.content === 'string' ? t.content : JSON.stringify(t.content)}</div>
+                <div style={{ marginTop: "4px", whiteSpace: "pre-wrap" }}>
+                  {typeof t.content === "string"
+                    ? t.content
+                    : JSON.stringify(t.content)}
+                </div>
               </div>
             ))}
           </div>
@@ -244,16 +282,21 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
   };
 
   const sendMessage = async () => {
-    if ((!input.trim() && !image)) return;
+    if (!input.trim() && !image) return;
 
     setLoading(true);
     const userMsg = { role: "user", content: input, img: image || null };
-    const optimisticAiMsg = { role: "assistant", content: "Thinking...", thoughts: [], isThinking: true };
+    const optimisticAiMsg = {
+      role: "assistant",
+      content: "Thinking...",
+      thoughts: [],
+      isThinking: true,
+    };
 
     // Optimistic update
-    setChatMessage(prev => {
+    setChatMessage((prev) => {
       const isNested = !!prev?.data?.messages;
-      const msgs = isNested ? prev.data.messages : (prev?.messages || []);
+      const msgs = isNested ? prev.data.messages : prev?.messages || [];
       const newMsgs = [...msgs, userMsg, optimisticAiMsg];
 
       return isNested
@@ -269,20 +312,30 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
     responseTimeoutRef.current = setTimeout(() => {
       console.warn("⏳ Response timeout reached (30s)");
       setLoading(false);
-      setChatMessage(prev => {
+      setChatMessage((prev) => {
         const isNested = !!prev?.data?.messages;
-        const msgList = isNested ? prev.data.messages : (prev?.messages || []);
+        const msgList = isNested ? prev.data.messages : prev?.messages || [];
         let newMsgList = [...msgList];
         const lastMsg = msgList[msgList.length - 1];
 
-        const errorContent = "Currently our server is busy please try again later";
+        const errorContent =
+          "Currently our server is busy please try again later";
 
-        if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
-          newMsgList[newMsgList.length - 1] = { ...lastMsg, content: errorContent, isThinking: false };
+        if (
+          lastMsg &&
+          (lastMsg.role === "assistant" || lastMsg.role === "ai")
+        ) {
+          newMsgList[newMsgList.length - 1] = {
+            ...lastMsg,
+            content: errorContent,
+            isThinking: false,
+          };
         } else {
           newMsgList.push({ role: "assistant", content: errorContent });
         }
-        return isNested ? { ...prev, data: { ...prev.data, messages: newMsgList } } : { ...prev, messages: newMsgList };
+        return isNested
+          ? { ...prev, data: { ...prev.data, messages: newMsgList } }
+          : { ...prev, messages: newMsgList };
       });
     }, 30000);
 
@@ -306,26 +359,26 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
         }
       );
 
-      if (refreshHistory) {
-        await refreshHistory();
-      }
-
       // If New Chat, update active ID from response to trigger socket subscription
-      const newChatId = res.data.conversationId || res.data._id || res.data?.data?._id;
+      const newChatId =
+        res.data?.data?.conversationId || res.data.data?.userMessage?._id;
       if (!activeChatId && newChatId) {
-        console.log("🆕 New Chat Created, ID:", newChatId);
         setActiveChatId(newChatId);
-      }
-      // NOTE: We do NOT clear timeout here, we wait for socket response
 
+        // wait one tick so useEffect runs & socket joins room
+        setTimeout(() => {
+          console.log("🔁 Socket ready for new chat:", newChatId);
+        }, 0);
+      }
+
+      refreshHistory?.();
+      // NOTE: We do NOT clear timeout here, we wait for socket response
     } catch (err) {
       console.error("Error sending message:", err);
       setLoading(false);
       clearResponseTimeout();
     }
   };
-
-
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -342,45 +395,75 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
   const removeImage = () => setImage(null);
 
   // Use chatMessage (fetched detailed view) or fallback to chat (prop from history) or empty
-  // Handle nested 'data' if the API wraps the response. 
+  // Handle nested 'data' if the API wraps the response.
   // Based on user log: { status: "success", data: { messages: [...] } }
   // So we look for chatMessage.data.messages
-  const currentMessages = chatMessage?.data?.messages || chatMessage?.messages || chat?.messages || [];
+  const currentMessages =
+    chatMessage?.data?.messages ||
+    chatMessage?.messages ||
+    chat?.messages ||
+    [];
 
   return (
     <div className={styles.chatArea}>
       <div className={styles.messages}>
         {currentMessages.length === 0 && !loading && (
           <div className={styles.emptyStateContainer}>
-
             <h2 className={styles.emptyTitle}>Unlock Your Creativity</h2>
             <p className={styles.emptySubtitle}>
-              Sarjan AI is ready to assist. Choose a starter prompt below or type your own idea to begin.
+              Sarjan AI is ready to assist. Choose a starter prompt below or
+              type your own idea to begin.
             </p>
 
             <div className={styles.quickPromptsGrid}>
-              <div className={styles.promptCard} onClick={() => setInput("Write a creative blog post about AI trends")}>
+              <div
+                className={styles.promptCard}
+                onClick={() =>
+                  setInput("Write a creative blog post about AI trends")
+                }
+              >
                 <FaPenNib className={styles.promptIcon} />
                 <div className={styles.promptTitle}>Draft Content</div>
-                <div className={styles.promptDesc}>Write creative blog posts or articles</div>
+                <div className={styles.promptDesc}>
+                  Write creative blog posts or articles
+                </div>
               </div>
 
-              <div className={styles.promptCard} onClick={() => setInput("Explain how Neural Networks work in simple terms")}>
+              <div
+                className={styles.promptCard}
+                onClick={() =>
+                  setInput("Explain how Neural Networks work in simple terms")
+                }
+              >
                 <FaGraduationCap className={styles.promptIcon} />
                 <div className={styles.promptTitle}>Learn a Concept</div>
-                <div className={styles.promptDesc}>Explain complex topics simply</div>
+                <div className={styles.promptDesc}>
+                  Explain complex topics simply
+                </div>
               </div>
 
-              <div className={styles.promptCard} onClick={() => setInput("Debug this React useEffect code: ")}>
+              <div
+                className={styles.promptCard}
+                onClick={() => setInput("Debug this React useEffect code: ")}
+              >
                 <FaCode className={styles.promptIcon} />
                 <div className={styles.promptTitle}>Debug Code</div>
-                <div className={styles.promptDesc}>Fix errors and optimize scripts</div>
+                <div className={styles.promptDesc}>
+                  Fix errors and optimize scripts
+                </div>
               </div>
 
-              <div className={styles.promptCard} onClick={() => setInput("Brainstorm 5 marketing ideas for a coffee shop")}>
+              <div
+                className={styles.promptCard}
+                onClick={() =>
+                  setInput("Brainstorm 5 marketing ideas for a coffee shop")
+                }
+              >
                 <FaLightbulb className={styles.promptIcon} />
                 <div className={styles.promptTitle}>Brainstorming</div>
-                <div className={styles.promptDesc}>Generate unique ideas instantly</div>
+                <div className={styles.promptDesc}>
+                  Generate unique ideas instantly
+                </div>
               </div>
             </div>
           </div>
@@ -391,13 +474,23 @@ export default function ChatArea({ chat, activeChatId, chats, setChats, refreshH
           return (
             <div
               key={i}
-              className={`${styles.messageWrapper} ${isUser ? styles.userWrapper : styles.aiWrapper}`}
+              className={`${styles.messageWrapper} ${
+                isUser ? styles.userWrapper : styles.aiWrapper
+              }`}
             >
-              <div className={`${styles.avatar} ${isUser ? styles.userAvatar : styles.aiAvatar}`}>
+              <div
+                className={`${styles.avatar} ${
+                  isUser ? styles.userAvatar : styles.aiAvatar
+                }`}
+              >
                 {isUser ? <FaUser /> : <FaRobot />}
               </div>
 
-              <div className={`${styles.messageBubble} ${isUser ? styles.userBubble : styles.aiBubble}`}>
+              <div
+                className={`${styles.messageBubble} ${
+                  isUser ? styles.userBubble : styles.aiBubble
+                }`}
+              >
                 {msg.img && (
                   <div className={styles.msgImgWrapper}>
                     <img

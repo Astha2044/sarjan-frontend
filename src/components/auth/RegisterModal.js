@@ -1,9 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/incompatible-library */
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import styles from "../../styles/Register.module.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const RegisterModal = ({ open, onClose }) => {
   const {
@@ -15,13 +18,14 @@ const RegisterModal = ({ open, onClose }) => {
   } = useForm();
 
   const password = watch("password");
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit = async (data) => {
     try {
-      await axios.post(
+      const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/register`,
         {
           name: data.name,
@@ -30,16 +34,25 @@ const RegisterModal = ({ open, onClose }) => {
         }
       );
 
+      console.log("res: ", res);
+
+      // ✅ SAME AS LOGIN
+      localStorage.setItem("user", JSON.stringify(res.data?.data));
+
       toast.success("Registration successful 🚀");
-      reset();       // 🔥 clear all fields
-      onClose();     // 🔥 close modal
+
+      reset(); // clear form
+      onClose(); // close modal
+
+      // ✅ Redirect to Studio
+      router.push("/studio");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Registration failed");
     }
   };
 
   const handleClose = () => {
-    reset();     // 🔥 close button par pan reset
+    reset(); // 🔥 close button par pan reset
     onClose();
   };
 
@@ -48,6 +61,13 @@ const RegisterModal = ({ open, onClose }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
+        <div className={styles.logoWrapper}>
+          <img
+            src="/images/sarjan.png"
+            alt="Sarjan AI"
+            className={styles.logo}
+          />
+        </div>
         <h2 className={styles.title}>Create Account</h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -107,15 +127,11 @@ const RegisterModal = ({ open, onClose }) => {
             />
             <span
               className={styles.eyeIcon}
-              onClick={() =>
-                setShowConfirmPassword(!showConfirmPassword)
-              }
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
               {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
-            {errors.confirmPassword && (
-              <p>{errors.confirmPassword.message}</p>
-            )}
+            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           </div>
 
           <button disabled={isSubmitting} className={styles.submitBtn}>

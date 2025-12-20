@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import Head from "next/head";
 import SarjanAIHero from "@/components/Home/HeroSection";
 import FlowPage from "@/components/OurFlow/flow";

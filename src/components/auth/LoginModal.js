@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -6,7 +7,7 @@ import { useRouter } from "next/router";
 import styles from "../../styles/Register.module.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const LoginModal = ({ open, onClose }) => {
+const LoginModal = ({ open, onClose, onOpenRegister }) => {
   const router = useRouter();
 
   const {
@@ -53,6 +54,13 @@ const LoginModal = ({ open, onClose }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
+        <div className={styles.logoWrapper}>
+          <img
+            src="/images/sarjan.png"
+            alt="Sarjan AI"
+            className={styles.logo}
+          />
+        </div>
         <h2 className={styles.title}>Welcome Back</h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -95,6 +103,18 @@ const LoginModal = ({ open, onClose }) => {
             {isSubmitting ? "Logging in..." : "Login"}
           </button>
         </form>
+        <div className={styles.switchAuth}>
+          <span>Don’t have an account?</span>
+          <button
+            type="button"
+            onClick={() => {
+              onClose(); // Close Login
+              onOpenRegister(); // Open Register
+            }}
+          >
+            Register
+          </button>
+        </div>
 
         <button className={styles.closeBtn} onClick={handleClose}>
           ✕

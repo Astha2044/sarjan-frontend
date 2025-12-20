@@ -7,32 +7,22 @@ export default function UserMenu() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  // ✅ Lazy initialization (NO useEffect needed)
   const [user] = useState(() => {
-      if (typeof window !== "undefined") {
-          const storedUser = localStorage.getItem("user");
-          return storedUser ? JSON.parse(storedUser) : null;
-        }
-        return null;
-    });
-    console.log('user: ', user);
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      return storedUser ? JSON.parse(storedUser) : null;
+    }
+    return null;
+  });
 
   const handleLogout = async () => {
     try {
-
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/logout`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${user?.token}` } }
       );
-    } catch (err) {
-      // ignore error
     } finally {
-      // ✅ Force logout
       localStorage.clear();
       router.push("/");
     }
@@ -46,7 +36,11 @@ export default function UserMenu() {
         className={styles.userInfo}
         onClick={() => setOpen(!open)}
       >
-        <div>
+        <div className={styles.avatarCircle}>
+          {user.name?.charAt(0)?.toUpperCase()}
+        </div>
+
+        <div className={styles.userText}>
           <strong>{user.name}</strong>
           <p>{user.email}</p>
         </div>
@@ -54,11 +48,12 @@ export default function UserMenu() {
 
       {open && (
         <div className={styles.menu}>
-          <p className={styles.logout} onClick={handleLogout}>
+          <button className={styles.logout} onClick={handleLogout}>
             Logout
-          </p>
+          </button>
         </div>
       )}
     </div>
   );
 }
+
