@@ -554,5 +554,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
+}
+
+/* Message Actions */
+.messageActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  /* border-top: 1px solid rgba(255, 255, 255, 0.05); */
+  padding-top: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.messageBubble:hover .messageActions {
+  opacity: 1;
+}
+
+.actionBtn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionBtn:hover {
+  color: #5eead4;
+  background: rgba(94, 234, 212, 0.1);
+}
+
+.actionBtn svg {
+  font-size: 1rem;
 }
