@@ -49,11 +49,7 @@ const Footer = () => {
           <div className={styles.brandSection}>
             <div className={styles.logoWrapper}>
               <div className={styles.logoContainer}>
-                <img
-                  src="/Sarjan_Logo.png"
-                  alt="Sarjan AI"
-                  className={styles.logoImage}
-                />
+
                 <div className={styles.logoGlow} />
                 <span className={styles.logoText}>SARJAN AI</span>
               </div>
@@ -111,7 +107,7 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-{/* 
+            {/* 
             <p className={styles.linksNote}>
               A privacy-first AI platform designed for modern teams and
               intelligent workflows.
