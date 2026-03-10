@@ -44,10 +44,10 @@ export default function App({ Component, pageProps }) {
           }
         );
 
-        // ✅ token valid
+        // token valid
         setAuthChecked(true);
       } catch (error) {
-        // ❌ token invalid
+        //  token invalid
         localStorage.clear();
         router.push("/");
       }
@@ -56,7 +56,7 @@ export default function App({ Component, pageProps }) {
     verifyUser();
   }, [router]);
 
-  // ⏳ prevent UI flash before auth check
+  //  prevent UI flash before auth check
   if (!authChecked) return null;
 
   return isStudio ? (

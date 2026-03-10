@@ -25,12 +25,12 @@ export default function Studio() {
 
   const createNewChat = () => {
     setActiveChatId(null);
-    setSidebarOpen(false); // ✅ close sidebar on mobile
+    setSidebarOpen(false); //  close sidebar on mobile
   };
 
   const handleChatSelect = (id) => {
     setActiveChatId(id);
-    setSidebarOpen(false); // ✅ close sidebar on mobile
+    setSidebarOpen(false); //  close sidebar on mobile
   };
 
   const activeChat = chats.find((c) => c._id === activeChatId);
