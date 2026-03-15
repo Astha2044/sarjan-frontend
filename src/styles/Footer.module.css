@@ -530,10 +530,10 @@
 
 .signatureChar:hover,
 .signatureCharHovered {
-  color: #5eead4;
+  color: #90e4d8;
   -webkit-text-stroke: 0;
-  text-shadow: 0 0 20px rgba(94, 234, 212, 0.4),
-    0 0 40px rgba(94, 234, 212, 0.4), 0 0 80px rgba(94, 234, 212, 0.4);
+  text-shadow: 0 0 20px rgba(94, 234, 212, 0.1),
+    0 0 40px rgba(94, 234, 212, 0.1), 0 0 80px rgba(94, 234, 212, 0.1);
   transform: scale(1.08);
 }
 

@@ -11,7 +11,7 @@
 .header-scrolled {
   padding: 0.4rem 0;
   background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(35px) saturate(200%);
+  /* backdrop-filter: blur(35px) saturate(200%); */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
@@ -133,6 +133,7 @@
   display: flex;
   align-items: center;
   border-radius: 12px;
+  padding: 0px 10px;
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -184,7 +185,7 @@
   position: relative;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 500;
   padding: 0.5rem 0;
   transition: all 0.3s ease;
