@@ -62,14 +62,14 @@
 .logo {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #5eead4, #a855f7);
+  background: linear-gradient(135deg, #a0faed, #bc91e4);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 600;
   color: #000;
-  font-size: 18px;
+  font-size: 20px;
   box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
 }
 
@@ -238,20 +238,23 @@
   justify-content: center;
   font-weight: 700;
   color: #020617;
-  font-size: 16px;
+  font-size: 20px;
   flex-shrink: 0;
 }
 
 /* User text */
 .userText strong {
   display: block;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 1px;
   color: #f8fafc;
 }
 
 .userText p {
   font-size: 12px;
   color: #94a3b8;
+  letter-spacing: 1px;
   margin: 0;
 }
 
