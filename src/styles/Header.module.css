@@ -84,7 +84,7 @@
 }
 
 /* Mesh Gradient Overlay */
-.mesh-gradient {
+/* .mesh-gradient {
   position: absolute;
   inset: 0;
   background: radial-gradient(
@@ -96,7 +96,7 @@
     radial-gradient(at 50% 50%, rgba(45, 212, 191, 0.05) 0px, transparent 50%);
   animation: meshMove 25s ease-in-out infinite;
   opacity: 0.6;
-}
+} */
 
 /* Gradient Border */
 .gradient-border {
@@ -185,7 +185,7 @@
   position: relative;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-size: 0.98rem;
+  font-size: 1rem;
   font-weight: 500;
   padding: 0.5rem 0;
   transition: all 0.3s ease;
