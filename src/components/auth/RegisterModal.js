@@ -90,7 +90,7 @@ const RegisterModal = ({ open, onClose }) => {
           <div className={styles.field}>
             <input
               placeholder="Full Name"
-              {...register("name", { required: "Name is required" })}
+              {...register("name", { required: "Name is required" })} // spread operator: it take all properties of an object an add them to the input element.
             />
             {errors.name && <p>{errors.name.message}</p>}
           </div>

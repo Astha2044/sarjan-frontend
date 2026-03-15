@@ -532,19 +532,19 @@
 .signatureCharHovered {
   color: #5eead4;
   -webkit-text-stroke: 0;
-  text-shadow: 0 0 20px rgba(94, 234, 212, 0.8),
-    0 0 40px rgba(94, 234, 212, 0.6), 0 0 80px rgba(94, 234, 212, 0.4);
+  text-shadow: 0 0 20px rgba(94, 234, 212, 0.4),
+    0 0 40px rgba(94, 234, 212, 0.4), 0 0 80px rgba(94, 234, 212, 0.4);
   transform: scale(1.08);
 }
 
 .signatureCharGlow {
   position: absolute;
   inset: -20%;
-  background: radial-gradient(
+  /* background: radial-gradient(
     circle,
     rgba(94, 234, 212, 0.25),
     transparent 60%
-  );
+  ); */
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;

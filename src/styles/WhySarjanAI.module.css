@@ -87,16 +87,16 @@
   inset: -40%;
   background: radial-gradient(
     circle,
-    rgba(94, 234, 212, 0.35),
-    transparent 60%
+    rgba(94, 234, 212, 0.1),
+    transparent 50%
   );
   opacity: 0;
   transition: opacity 0.6s ease;
 }
 
-.card:hover .glow {
+/* .card:hover .glow {
   opacity: 1;
-}
+} */
 
 .card:hover {
   transform: translateY(-18px) scale(1.03);
@@ -111,6 +111,7 @@
   width: 56px;
   height: 56px;
   border-radius: 18px;
+  color: #020617;
   background: linear-gradient(135deg, #5eead4, #2dd4bf);
   display: flex;
   align-items: center;

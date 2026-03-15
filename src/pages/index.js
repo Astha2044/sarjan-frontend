@@ -38,6 +38,7 @@ export default function Home() {
       <WhySarjanAI />
       <ExamplesSection />
         <LoginModal
+        
         open={showLogin}
         onClose={() => setShowLogin(false)}
       />
