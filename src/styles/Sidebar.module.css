@@ -261,13 +261,14 @@
 /* Dropdown menu */
 .menu {
   position: absolute;
-  bottom: 56px;
+  bottom: 100%; /* Push it exactly to the top of the user container */
   left: 0;
   right: 0;
+  margin-bottom: 8px; /* Add some spacing between the menu and the user info */
   background: #020617;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 6px;
+  padding: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   animation: fadeUp 0.2s ease;
   z-index: 30;
@@ -304,11 +305,36 @@
 
 /* Mobile touch-friendly */
 @media (max-width: 768px) {
-  .menu {
-    bottom: 64px;
-  }
-
   .userInfo {
     padding: 14px;
   }
+}
+.planBadge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(94, 234, 212, 0.1);
+  color: #5eead4;
+  border: 1px solid rgba(94, 234, 212, 0.2);
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.upgradeBtn {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #5eead4, #14b8a6);
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upgradeBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 234, 212, 0.3);
 }

@@ -13,7 +13,9 @@ import {
   FaGraduationCap,
   FaRegCopy,
   FaRepeat,
+  FaPenToSquare,
 } from "react-icons/fa6";
+import PricingModal from "./PricingModal";
 
 export default function ChatArea({
   chat,
@@ -27,10 +29,14 @@ export default function ChatArea({
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [chatMessage, setChatMessage] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editInput, setEditInput] = useState("");
+  const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+  const [showPricing, setShowPricing] = useState(false);
+  const [imageRestrictedMsg, setImageRestrictedMsg] = useState(false);
   const messagesEndRef = useRef(null);
   const socketRef = useRef(null);
   const responseTimeoutRef = useRef(null);
-
   const socketReadyRef = useRef(false);
 
   const clearResponseTimeout = () => {
@@ -40,12 +46,10 @@ export default function ChatArea({
     }
   };
 
-  // 🔹 Scroll to bottom on new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessage, loading]);
 
-  // 🔹 Fetch chat messages
   const fetchChatMessages = async (id) => {
     if (!id) return;
     try {
@@ -56,33 +60,23 @@ export default function ChatArea({
         headers: { Authorization: `Bearer ${user.token}` },
       });
       console.log("Chat details response:", res.data);
-      // Attempt to find messages in common locations if direct path fails, or just log for now to see structure.
-      // If the structure is res.data.data, we should adjust.
-      // For now, let's just log it.
       setChatMessage(res.data);
     } catch (err) {
       console.error("Failed to fetch chat messages:", err);
     }
   };
 
-  // 🔹 Socket Connection (Persistent)
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user?.token) return;
 
-    // Connect Once
     console.log(
       "Using token for socket:",
-      user.token?.substring(0, 10) + "..."
+      user.token?.substring(0, 10) + "...",
     );
 
-    // Remove strict transport forcing to allow polling -> upgrade (more robust)
     const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL, {
-      auth: {
-        token: user.token,
-      },
-      // transports: ["polling", "websocket"], // Let default happen
-      // withCredentials: true,
+      auth: { token: user.token },
     });
 
     socketRef.current = socket;
@@ -100,19 +94,16 @@ export default function ChatArea({
       console.error("❌ Socket connection error:", err);
     });
 
-    // DEBUG: Listen to ALL events
     socket.onAny((event, ...args) => {
       console.log(`🔍 [DEBUG] RAW SOCKET EVENT: "${event}"`, args);
     });
 
-    // Clean up connection on unmount
     return () => {
       console.log("🧹 Cleaning up socket connection...");
       socket.disconnect();
     };
   }, []);
 
-  // 🔹 Handle Active Chat Subscription
   useEffect(() => {
     const socket = socketRef.current;
     if (!socket || !activeChatId) return;
@@ -120,12 +111,9 @@ export default function ChatArea({
     const roomId = `chat_${activeChatId}`;
     console.log(`🔗 Joining room: "${roomId}"`);
 
-    // Emit join event - trying common patterns since backend join logic wasn't provided
-    // We send both to cover bases if we can't verify backend 'on connection' logic
     socket.emit("join", roomId);
     socket.emit("join_room", roomId);
 
-    // Handler for pipeline steps (streaming stages)
     const handlePipelineStep = (response) => {
       clearResponseTimeout();
       console.log("🌊 Pipeline Step:", response);
@@ -134,17 +122,11 @@ export default function ChatArea({
       setChatMessage((prev) => {
         const isNested = !!prev?.data?.messages;
         const msgList = isNested ? prev.data.messages : prev?.messages || [];
-
         const lastMsg = msgList[msgList.length - 1];
         let newMsgList = [...msgList];
 
-        if (
-          lastMsg &&
-          (lastMsg.role === "assistant" || lastMsg.role === "ai")
-        ) {
-          // Append to thoughts array
+        if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
           const currentThoughts = lastMsg.thoughts || [];
-
           let stepTitle = step;
           if (step === "ideas") stepTitle = "Generating Ideas";
           if (step === "critiques") stepTitle = "Critiquing Content";
@@ -153,7 +135,6 @@ export default function ChatArea({
           if (step === "image_gen") stepTitle = "Creating Image";
 
           const newThought = { step: stepTitle, content: content };
-
           const updatedMsg = {
             ...lastMsg,
             content: "Thinking...",
@@ -177,7 +158,6 @@ export default function ChatArea({
       setLoading(false);
     };
 
-    // Handler for final response (DB saved)
     const handleResponseReady = (response) => {
       clearResponseTimeout();
       console.log("✅ Response Ready:", response);
@@ -189,12 +169,7 @@ export default function ChatArea({
           let newMsgList = [...msgList];
           const lastMsg = msgList[msgList.length - 1];
 
-          // Replace the last "thinking" message with the final one
-          if (
-            lastMsg &&
-            (lastMsg.role === "assistant" || lastMsg.role === "ai")
-          ) {
-            // Remove thoughts, just show final content
+          if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
             newMsgList[newMsgList.length - 1] = {
               ...aiMessage,
               isThinking: false,
@@ -211,17 +186,16 @@ export default function ChatArea({
       setLoading(false);
     };
 
-    const handleStop = (response) => {
+    const handleStop = () => {
       clearResponseTimeout();
       setLoading(false);
     };
 
-    const handleError = (response) => {
+    const handleError = () => {
       clearResponseTimeout();
       setLoading(false);
     };
 
-    // Subscribe to events
     socket.on("pipeline_step", handlePipelineStep);
     socket.on("response_ready", handleResponseReady);
     socket.on("generation_stopped", handleStop);
@@ -237,16 +211,14 @@ export default function ChatArea({
     };
   }, [activeChatId]);
 
-  // 🔹 Trigger fetch when activeChatId changes
   useEffect(() => {
     if (activeChatId) {
       fetchChatMessages(activeChatId);
     } else {
-      setChatMessage(null); // Clear for new chat
+      setChatMessage(null);
     }
   }, [activeChatId]);
 
-  // Helper component for thinking process
   const ThinkingBlock = ({ thoughts }) => {
     const [isOpen, setIsOpen] = useState(false);
     const lastThought = thoughts[thoughts.length - 1];
@@ -286,10 +258,26 @@ export default function ChatArea({
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      // Optional: Add a toast notification here
     } catch (err) {
       console.error("Failed to copy:", err);
     }
+  };
+
+  const handleEditStart = (index, content) => {
+    setEditingIndex(index);
+    setEditInput(content);
+  };
+
+  const handleEditSave = () => {
+    if (!editInput.trim()) return;
+    setEditingIndex(null);
+    sendMessage(editInput);
+  };
+
+  const handleEditCancel = () => {
+    setEditingIndex(null);
+    setEditInput("");
+    setTimeout(() => setEditingIndex(null), 0);
   };
 
   const sendMessage = async (textOverride = null) => {
@@ -305,12 +293,10 @@ export default function ChatArea({
       isThinking: true,
     };
 
-    // Optimistic update
     setChatMessage((prev) => {
       const isNested = !!prev?.data?.messages;
       const msgs = isNested ? prev.data.messages : prev?.messages || [];
       const newMsgs = [...msgs, userMsg, optimisticAiMsg];
-
       return isNested
         ? { ...prev, data: { ...prev.data, messages: newMsgs } }
         : { ...prev, messages: newMsgs };
@@ -320,23 +306,17 @@ export default function ChatArea({
     setImage(null);
     clearResponseTimeout();
 
-    // Start 30s Timeout
     responseTimeoutRef.current = setTimeout(() => {
-      console.warn("⏳ Response timeout reached (30s)");
+      console.warn("⏳ Response timeout reached (60s)");
       setLoading(false);
       setChatMessage((prev) => {
         const isNested = !!prev?.data?.messages;
         const msgList = isNested ? prev.data.messages : prev?.messages || [];
         let newMsgList = [...msgList];
         const lastMsg = msgList[msgList.length - 1];
+        const errorContent = "Currently our server is busy please try again later";
 
-        const errorContent =
-          "Currently our server is busy please try again later";
-
-        if (
-          lastMsg &&
-          (lastMsg.role === "assistant" || lastMsg.role === "ai")
-        ) {
+        if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
           newMsgList[newMsgList.length - 1] = {
             ...lastMsg,
             content: errorContent,
@@ -349,7 +329,7 @@ export default function ChatArea({
           ? { ...prev, data: { ...prev.data, messages: newMsgList } }
           : { ...prev, messages: newMsgList };
       });
-    }, 30000);
+    }, 60000); // 60 seconds timeout to allow slow multi-agent pipelines
 
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -368,25 +348,37 @@ export default function ChatArea({
             Authorization: `Bearer ${user.token}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
-      // If New Chat, update active ID from response to trigger socket subscription
       const newChatId =
         res.data?.data?.conversationId || res.data.data?.userMessage?._id;
       if (!activeChatId && newChatId) {
         setActiveChatId(newChatId);
-
-        // wait one tick so useEffect runs & socket joins room
         setTimeout(() => {
           console.log("🔁 Socket ready for new chat:", newChatId);
         }, 0);
       }
 
       refreshHistory?.();
-      // NOTE: We do NOT clear timeout here, we wait for socket response
+
     } catch (err) {
       console.error("Error sending message:", err);
+
+      if (err.response?.data?.error === "limit_reached") {
+        setShowUpgradeBanner(true);
+        setLoading(false);
+        clearResponseTimeout();
+        return;
+      }
+
+      if (err.response?.data?.error === "image_restricted") {
+        setImageRestrictedMsg(true);
+        setLoading(false);
+        clearResponseTimeout();
+        return;
+      }
+
       setLoading(false);
       clearResponseTimeout();
     }
@@ -407,19 +399,13 @@ export default function ChatArea({
   const removeImage = () => setImage(null);
 
   const handleRetry = () => {
-    // Find the last user message
     const reversedMessages = [...currentMessages].reverse();
     const lastUserMessage = reversedMessages.find((m) => m.role === "user");
-
     if (lastUserMessage && lastUserMessage.content) {
       sendMessage(lastUserMessage.content);
     }
   };
 
-  // Use chatMessage (fetched detailed view) or fallback to chat (prop from history) or empty
-  // Handle nested 'data' if the API wraps the response.
-  // Based on user log: { status: "success", data: { messages: [...] } }
-  // So we look for chatMessage.data.messages
   const currentMessages =
     chatMessage?.data?.messages ||
     chatMessage?.messages ||
@@ -428,16 +414,12 @@ export default function ChatArea({
 
   useEffect(() => {
     const pending = localStorage.getItem("pending_prompt");
-
     if (pending) {
       try {
         const parsed = JSON.parse(pending);
-
         if (parsed?.message) {
-          setInput(parsed.message); // ✅ textarea auto fill
+          setInput(parsed.message);
         }
-
-        // ✅ Fill થયા પછી remove
         localStorage.removeItem("pending_prompt");
       } catch (err) {
         console.error("Invalid pending_prompt data");
@@ -448,6 +430,52 @@ export default function ChatArea({
 
   return (
     <div className={styles.chatArea}>
+
+      {/* ── Upgrade limit banner ── */}
+      {showUpgradeBanner && (
+        <div className={styles.upgradeBanner}>
+          <span>You have reached your 10 message free limit.</span>
+          <button onClick={() => setShowPricing(true)}>
+            Upgrade to Pro — Free
+          </button>
+        </div>
+      )}
+
+      {/* ── Image restricted banner ── */}
+      {imageRestrictedMsg && (
+        <div className={styles.imageBanner}>
+          <span>🖼️ Image generation is a Pro only feature.</span>
+          <button
+            type="button"
+            onClick={() => {
+              setShowPricing(true);
+              setImageRestrictedMsg(false);
+            }}
+          >
+            Upgrade to Pro — Free
+          </button>
+          <button
+            type="button"
+            className={styles.dismissBtn}
+            onClick={() => setImageRestrictedMsg(false)}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* ── Pricing Modal ── */}
+      {showPricing && (
+        <PricingModal
+          onClose={() => setShowPricing(false)}
+          onUpgradeSuccess={() => {
+            setShowUpgradeBanner(false);
+            setImageRestrictedMsg(false);
+            setShowPricing(false);
+          }}
+        />
+      )}
+
       <div className={styles.messages}>
         {currentMessages.length === 0 && !loading && (
           <div className={styles.emptyStateContainer}>
@@ -456,7 +484,6 @@ export default function ChatArea({
               Sarjan AI is ready to assist. Choose a starter prompt below or
               type your own idea to begin.
             </p>
-
             <div className={styles.quickPromptsGrid}>
               <div
                 className={styles.promptCard}
@@ -470,7 +497,6 @@ export default function ChatArea({
                   Write creative blog posts or articles
                 </div>
               </div>
-
               <div
                 className={styles.promptCard}
                 onClick={() =>
@@ -483,7 +509,6 @@ export default function ChatArea({
                   Explain complex topics simply
                 </div>
               </div>
-
               <div
                 className={styles.promptCard}
                 onClick={() => setInput("Debug this React useEffect code: ")}
@@ -494,7 +519,6 @@ export default function ChatArea({
                   Fix errors and optimize scripts
                 </div>
               </div>
-
               <div
                 className={styles.promptCard}
                 onClick={() =>
@@ -516,19 +540,22 @@ export default function ChatArea({
           return (
             <div
               key={i}
-              className={`${styles.messageWrapper} ${isUser ? styles.userWrapper : styles.aiWrapper
-                }`}
+              className={`${styles.messageWrapper} ${
+                isUser ? styles.userWrapper : styles.aiWrapper
+              }`}
             >
               <div
-                className={`${styles.avatar} ${isUser ? styles.userAvatar : styles.aiAvatar
-                  }`}
+                className={`${styles.avatar} ${
+                  isUser ? styles.userAvatar : styles.aiAvatar
+                }`}
               >
                 {isUser ? <FaUser /> : <FaRobot />}
               </div>
 
               <div
-                className={`${styles.messageBubble} ${isUser ? styles.userBubble : styles.aiBubble
-                  }`}
+                className={`${styles.messageBubble} ${
+                  isUser ? styles.userBubble : styles.aiBubble
+                }`}
               >
                 {msg.img && (
                   <div className={styles.msgImgWrapper}>
@@ -546,13 +573,94 @@ export default function ChatArea({
 
                 <div className={styles.markdownContent}>
                   {isUser ? (
-                    <span>{msg.content || msg.text}</span>
+                    <>
+                      {editingIndex === i ? (
+                        <div className={styles.editContainer}>
+                          <textarea
+                            className={styles.editTextarea}
+                            value={editInput}
+                            onChange={(e) => setEditInput(e.target.value)}
+                          />
+                          <div className={styles.editActions}>
+                            <button
+                              type="button"
+                              className={styles.editCancelBtn}
+                              onClick={handleEditCancel}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.editSaveBtn}
+                              onClick={handleEditSave}
+                            >
+                              Save & Send
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <span>{msg.content || msg.text}</span>
+                          <div className={styles.messageActions}>
+                            <button
+                              className={styles.actionBtn}
+                              onClick={() =>
+                                copyToClipboard(msg.content || msg.text)
+                              }
+                              title="Copy message"
+                            >
+                              <FaRegCopy />
+                            </button>
+                            <button
+                              className={styles.actionBtn}
+                              onClick={() =>
+                                handleEditStart(i, msg.content || msg.text)
+                              }
+                              title="Edit message"
+                            >
+                              <FaPenToSquare />
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <>
                       {msg.isThinking && msg.thoughts ? (
                         <ThinkingBlock thoughts={msg.thoughts} />
+                      ) : msg.imageUrl ? (
+                        <div className={styles.generatedImgWrapper}>
+                          <img
+                            src={msg.imageUrl}
+                            alt="Generated"
+                            className={styles.generatedImg}
+                          />
+                          
+                           <a href={msg.imageUrl}
+                            download
+                            target="_blank"
+                            rel="noreferrer"
+                            className={styles.downloadBtn}
+                          >
+                            ⬇ Download
+                          </a>
+                        </div>
                       ) : (
-                        <ReactMarkdown>{msg.content || msg.text}</ReactMarkdown>
+                        // The response is markdown, so we handle it gracefully here:
+                        <ReactMarkdown 
+                          components={{
+                            img: ({node, ...props}) => (
+                              <div className={styles.generatedImgWrapper}>
+                                <img {...props} alt={props.alt || "Generated Output"} className={styles.generatedImg} />
+                                <a href={props.src} download="generated-image.jpg" target="_blank" rel="noreferrer" className={styles.downloadBtn}>
+                                  ⬇ Download
+                                </a>
+                              </div>
+                            )
+                          }}
+                        >
+                          {msg.content || msg.text}
+                        </ReactMarkdown>
                       )}
                       {!msg.isThinking && (
                         <div className={styles.messageActions}>
@@ -584,8 +692,6 @@ export default function ChatArea({
             </div>
           );
         })}
-
-        {/* Removed redundant loading indicator since we have optimistic 'Thinking...' message */}
 
         <div ref={messagesEndRef} />
       </div>
