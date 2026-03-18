@@ -1,0 +1,185 @@
+/* styles/ContactPage.module.css */
+
+.wrapper {
+  position: relative; min-height: 100vh;
+  background: radial-gradient(circle at 25% 20%, rgba(94,234,212,0.13), transparent 45%),
+    radial-gradient(circle at 75% 80%, rgba(45,212,191,0.1), transparent 50%), #020617;
+  color: #fff; overflow: hidden; padding: 80px 0 60px;
+}
+
+.orb1 {
+  position: absolute; width: 420px; height: 420px; border-radius: 50%;
+  background: rgba(94,234,212,0.08); filter: blur(90px);
+  top: -100px; left: -100px; pointer-events: none;
+}
+.orb2 {
+  position: absolute; width: 360px; height: 360px; border-radius: 50%;
+  background: rgba(16,185,129,0.07); filter: blur(80px);
+  bottom: -80px; right: -80px; pointer-events: none;
+}
+
+.container {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+}
+
+.header { text-align: center; margin-bottom: 64px; }
+
+.label {
+  font-size: 0.7rem; letter-spacing: 0.3em;
+  color: rgba(94,234,212,0.85); text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 600; margin: 20px 0 16px;
+}
+
+.header p {
+  max-width: 540px; margin: 0 auto;
+  color: rgba(209,250,243,0.85); font-size: 1.05rem; line-height: 1.7;
+}
+
+/* Layout */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: 28px; margin-bottom: 48px; align-items: start;
+}
+
+/* Info cards */
+.infoCol { display: flex; flex-direction: column; gap: 16px; }
+
+.infoCard {
+  position: relative; padding: 28px 24px; border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+  border: 1px solid rgba(255,255,255,0.09); backdrop-filter: blur(20px);
+  display: flex; gap: 18px; align-items: flex-start; overflow: hidden;
+  transition: border-color 0.4s ease, transform 0.3s ease;
+}
+.infoCard:hover { border-color: rgba(94,234,212,0.35); transform: translateY(-3px); }
+
+.cardGlow {
+  position: absolute; inset: -40%;
+  background: radial-gradient(circle, rgba(94,234,212,0.08), transparent 55%);
+  opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+}
+.infoCard:hover .cardGlow,
+.formCard:hover .cardGlow { opacity: 1; }
+
+.infoIcon {
+  width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px;
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
+  color: #020617; display: flex; align-items: center; justify-content: center;
+}
+
+.infoTitle {
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(94,234,212,0.7); margin-bottom: 4px;
+}
+.infoValue {
+  font-size: 0.97rem; font-weight: 500; color: #fff; margin-bottom: 3px;
+}
+.infoSub {
+  font-size: 0.8rem; color: rgba(148,163,184,0.65);
+}
+
+/* Form card */
+.formCard {
+  position: relative; padding: 44px 40px; border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+  border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px);
+  overflow: hidden;
+  transition: border-color 0.4s ease;
+}
+.formCard:hover { border-color: rgba(94,234,212,0.25); }
+
+.form h2 { font-size: 1.4rem; font-weight: 600; margin-bottom: 28px; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.field {
+  display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px;
+}
+
+.field label {
+  font-size: 0.82rem; font-weight: 500;
+  color: rgba(209,250,243,0.7); letter-spacing: 0.03em;
+}
+
+.field input,
+.field textarea {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: #fff; font-size: 0.95rem;
+  padding: 12px 16px; outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder { color: rgba(148,163,184,0.45); }
+
+.field input:focus,
+.field textarea:focus {
+  border-color: rgba(94,234,212,0.5);
+  box-shadow: 0 0 0 3px rgba(94,234,212,0.1);
+}
+
+.submitBtn {
+  width: 100%; padding: 15px;
+  border-radius: 14px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
+  color: #020617; font-size: 1rem; font-weight: 600;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.submitBtn:hover {
+  box-shadow: 0 10px 30px rgba(94,234,212,0.4);
+  transform: translateY(-2px);
+}
+
+/* Success state */
+.successMsg {
+  text-align: center; padding: 40px 20px;
+}
+
+.successIcon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
+  color: #020617; font-size: 1.8rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.successMsg h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+.successMsg p {
+  color: rgba(209,250,243,0.78); font-size: 0.97rem;
+  line-height: 1.7; margin-bottom: 28px;
+}
+
+.resetBtn {
+  padding: 12px 28px; border-radius: 12px; cursor: pointer;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; font-size: 0.9rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.resetBtn:hover { border-color: rgba(94,234,212,0.4); background: rgba(94,234,212,0.07); }
+
+.backRow { text-align: center; }
+.backLink {
+  font-size: 0.9rem; color: rgba(94,234,212,0.7);
+  text-decoration: none; transition: color 0.3s ease;
+}
+.backLink:hover { color: #5eead4; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .wrapper { padding: 60px 0 40px; }
+  .formCard { padding: 32px 24px; }
+  .row { grid-template-columns: 1fr; }
+}

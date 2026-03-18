@@ -1,0 +1,167 @@
+/* styles/FeaturesPage.module.css */
+
+.wrapper {
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(circle at 30% 20%, rgba(94, 234, 212, 0.15), transparent 45%),
+    radial-gradient(circle at 70% 80%, rgba(45, 212, 191, 0.12), transparent 50%),
+    #020617;
+  color: #ffffff;
+  overflow: hidden;
+  padding: 80px 0 60px;
+}
+
+.orb1 {
+  position: absolute; width: 450px; height: 450px; border-radius: 50%;
+  background: rgba(94, 234, 212, 0.09); filter: blur(90px);
+  top: -120px; left: -120px; pointer-events: none;
+}
+.orb2 {
+  position: absolute; width: 380px; height: 380px; border-radius: 50%;
+  background: rgba(16, 185, 129, 0.08); filter: blur(80px);
+  bottom: -80px; right: -80px; pointer-events: none;
+}
+.grid_bg {
+  position: absolute; inset: 0; opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(94, 234, 212, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+.container {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.label {
+  font-size: 0.7rem; letter-spacing: 0.3em;
+  color: rgba(94, 234, 212, 0.85); text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 600; margin: 20px 0 16px;
+}
+
+.header p {
+  max-width: 600px; margin: 0 auto;
+  color: rgba(209, 250, 243, 0.85); font-size: 1.05rem; line-height: 1.7;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-bottom: 80px;
+}
+
+.card {
+  position: relative;
+  padding: 40px 32px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.card:hover {
+  transform: translateY(-12px) scale(1.02);
+  border-color: rgba(94, 234, 212, 0.55);
+  box-shadow: 0 40px 100px rgba(94, 234, 212, 0.14);
+}
+
+.cardGlow {
+  position: absolute; inset: -40%;
+  background: radial-gradient(circle, rgba(94, 234, 212, 0.09), transparent 55%);
+  opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+}
+.card:hover .cardGlow { opacity: 1; }
+
+.cardTop {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+}
+
+.icon {
+  width: 50px; height: 50px; border-radius: 16px;
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
+  color: #020617;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.tag {
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(94, 234, 212, 0.1);
+  color: rgba(94, 234, 212, 0.85);
+  border: 1px solid rgba(94, 234, 212, 0.2);
+  border-radius: 6px; padding: 3px 9px;
+}
+
+.card h3 {
+  font-size: 1.2rem; font-weight: 500; margin-bottom: 10px;
+}
+
+.card p {
+  color: rgba(209, 250, 243, 0.85); line-height: 1.75; font-size: 0.95rem; margin: 0;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+  padding: 56px 40px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+  border: 1px solid rgba(94, 234, 212, 0.15);
+  margin-bottom: 48px;
+}
+
+.cta h2 { font-size: 2rem; font-weight: 600; margin-bottom: 12px; }
+.cta p { color: rgba(209,250,243,0.8); margin-bottom: 32px; font-size: 1rem; }
+
+.ctaButtons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+.btnPrimary {
+  padding: 14px 32px; border-radius: 14px;
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
+  color: #020617; font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.btnPrimary:hover {
+  box-shadow: 0 12px 32px rgba(94, 234, 212, 0.4); transform: translateY(-2px);
+}
+
+.btnSecondary {
+  padding: 14px 32px; border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; font-size: 0.95rem;
+  text-decoration: none; transition: border-color 0.3s ease, background 0.3s ease;
+}
+.btnSecondary:hover {
+  border-color: rgba(94,234,212,0.5); background: rgba(94,234,212,0.07);
+}
+
+.backRow { text-align: center; }
+.backLink {
+  font-size: 0.9rem; color: rgba(94, 234, 212, 0.7);
+  text-decoration: none; transition: color 0.3s ease;
+}
+.backLink:hover { color: #5eead4; }
+
+@media (max-width: 1024px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .wrapper { padding: 60px 0 40px; }
+  .card { padding: 32px 24px; }
+}

@@ -1,23 +1,51 @@
 // Footer.js
 import React, { useState } from "react";
 import styles from "../../styles/Footer.module.css";
-import { FaTelegramPlane, FaInstagram, FaTwitter, FaGithub, FaLinkedin } from "react-icons/fa";
-
+import {
+  FaTelegramPlane,
+  FaInstagram,
+  FaTwitter,
+  FaGithub,
+  FaLinkedin,
+} from "react-icons/fa";
 
 const Footer = () => {
   const [hoveredChar, setHoveredChar] = useState(null);
   const year = new Date().getFullYear();
 
-  const mainLinks = [
-    "Product",
-    "Pricing",
-    "About Us",
-    "Contact",
+  
+  const productLinks = [
+    { label: "Features",  href: "/features",  badge: null  },
+    { label: "Pricing",   href: "/pricing",   badge: null  },
+    // { label: "Changelog", href: "/changelog", badge: "NEW" },
+    { label: "Roadmap",   href: "/roadmap",   badge: null  },
+    { label: "Docs",      href: "/docs",      badge: null  },
+  ];
+
+  
+  const companyLinks = [
+    { label: "About Us", href: "/about"   },
+    { label: "Blog",     href: "/blog"    },
+    { label: "Careers",  href: "/careers" },
+    { label: "Contact",  href: "/contact" },
+  ];
+
+  // ─────────────────────────────────────────────────────────
+  // SOCIAL LINKS
+  // → Replace the href values with your actual profile URLs
+  // ─────────────────────────────────────────────────────────
+  const socialLinks = [
+    { label: "Telegram",  href: "https://t.me/yourhandle",                 icon: FaTelegramPlane, cls: styles.telegram  },
+    { label: "Twitter",   href: "https://twitter.com/yourhandle",          icon: FaTwitter,       cls: styles.twitter   },
+    { label: "Instagram", href: "https://instagram.com/yourhandle",        icon: FaInstagram,     cls: styles.instagram },
+    { label: "GitHub",    href: "https://github.com/yourhandle",           icon: FaGithub,        cls: styles.github    },
+    { label: "LinkedIn",  href: "https://linkedin.com/company/yourhandle", icon: FaLinkedin,      cls: styles.linkedin  },
   ];
 
   return (
     <footer className={styles.footer}>
-      {/* Backgrounds */}
+
+      {/* Backgrounds — UNCHANGED */}
       <div className={styles.backgroundGrid} />
       <div className={styles.particlesContainer}>
         {[...Array(20)].map((_, i) => (
@@ -33,23 +61,21 @@ const Footer = () => {
           />
         ))}
       </div>
-
       <div className={styles.orbsContainer}>
         <div className={`${styles.orb} ${styles.orb1}`} />
         <div className={`${styles.orb} ${styles.orb2}`} />
         <div className={`${styles.orb} ${styles.orb3}`} />
       </div>
-
       <div className={styles.topBorder} />
 
       {/* Main Content */}
       <div className={styles.mainContent}>
         <div className={styles.contentGrid}>
+
           {/* LEFT — BRAND */}
           <div className={styles.brandSection}>
             <div className={styles.logoWrapper}>
               <div className={styles.logoContainer}>
-
                 <div className={styles.logoGlow} />
                 <span className={styles.logoText}>SARJAN AI</span>
               </div>
@@ -60,69 +86,69 @@ const Footer = () => {
               intelligent collaboration.
             </p>
 
-            {/* <div className={styles.socialLinks}>
-              <a href="#" className={styles.socialButton} aria-label="Telegram">
-                <div className={styles.socialGradient} />
-                <FaTelegramPlane className={styles.socialIcon} />
-                <div className={styles.socialGlow} />
-              </a>
-
-              <a href="#" className={styles.socialButton} aria-label="Instagram">
-                <div className={styles.socialGradient} />
-                <FaInstagram className={styles.socialIcon} />
-                <div className={styles.socialGlow} />
-              </a>
-
-              <a href="#" className={styles.socialButton} aria-label="Twitter">
-                <div className={styles.socialGradient} />
-                <FaTwitter className={styles.socialIcon} />
-                <div className={styles.socialGlow} />
-              </a>
-
-              <a href="#" className={styles.socialButton} aria-label="GitHub">
-                <div className={styles.socialGradient} />
-                <FaGithub className={styles.socialIcon} />
-                <div className={styles.socialGlow} />
-              </a>
-
-              <a href="#" className={styles.socialButton} aria-label="LinkedIn">
-                <div className={styles.socialGradient} />
-                <FaLinkedin className={styles.socialIcon} />
-                <div className={styles.socialGlow} />
-              </a>
-            </div> */}
+            {/* SOCIAL ICONS — opens each in a new tab */}
+            <div className={styles.socialLinks}>
+              {socialLinks.map(({ label, href, icon: Icon, cls }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.socialButton} ${cls}`}
+                  aria-label={label}
+                >
+                  <div className={styles.socialGradient} />
+                  <Icon className={styles.socialIcon} />
+                  <div className={styles.socialGlow} />
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* RIGHT — SIMPLE LINKS */}
-          <div className={styles.simpleLinks}>
-            <h4 className={styles.simpleHeading}>Explore</h4>
-
-            <ul className={styles.simpleList}>
-              {mainLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className={styles.simpleLink}>
-                    {link}
+          {/* MIDDLE — PRODUCT LINKS */}
+          <div className={styles.linkColumn}>
+            <h4 className={styles.linkHeading}>Product</h4>
+            <ul className={styles.linkList}>
+              {productLinks.map(({ label, href, badge }) => (
+                <li key={label}>
+                  <a href={href} className={styles.link}>
+                    {label}
+                    {badge && (
+                      <span className={styles.linkBadge}>{badge}</span>
+                    )}
                     <span className={styles.linkUnderline} />
                   </a>
                 </li>
               ))}
             </ul>
-            {/* 
-            <p className={styles.linksNote}>
-              A privacy-first AI platform designed for modern teams and
-              intelligent workflows.
-            </p> */}
           </div>
+
+          {/* RIGHT — COMPANY LINKS */}
+          <div className={styles.linkColumn}>
+            <h4 className={styles.linkHeading}>Company</h4>
+            <ul className={styles.linkList}>
+              {companyLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <a href={href} className={styles.link}>
+                    {label}
+                    <span className={styles.linkUnderline} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
         </div>
 
-        {/* SIGNATURE */}
+        {/* SIGNATURE — UNCHANGED */}
         <div className={styles.signatureSection}>
           <div className={styles.signatureText}>
             {["S", "A", "R", "J", "A", "N"].map((char, i) => (
               <span
                 key={i}
-                className={`${styles.signatureChar} ${hoveredChar === i ? styles.signatureCharHovered : ""
-                  }`}
+                className={`${styles.signatureChar} ${
+                  hoveredChar === i ? styles.signatureCharHovered : ""
+                }`}
                 onMouseEnter={() => setHoveredChar(i)}
                 onMouseLeave={() => setHoveredChar(null)}
               >
@@ -136,16 +162,19 @@ const Footer = () => {
         {/* BOTTOM BAR */}
         <div className={styles.bottomBar}>
           <div className={styles.bottomContent}>
+
             <p className={styles.copyright}>
               © {year} Sarjan AI. All rights reserved.
             </p>
 
             <div className={styles.bottomLinks}>
-              <a href="#" className={styles.bottomLink}>
+              {/* ✅ Clickable → create pages/privacy.js to activate */}
+              <a href="/privacy" className={styles.bottomLink}>
                 Privacy Policy
               </a>
               <span className={styles.separator}>•</span>
-              <a href="#" className={styles.bottomLink}>
+              {/* ✅ Clickable → create pages/terms.js to activate */}
+              <a href="/terms" className={styles.bottomLink}>
                 Terms of Service
               </a>
             </div>
@@ -153,8 +182,10 @@ const Footer = () => {
             <p className={styles.madeWith}>
               Made with <span className={styles.heart}>♥</span> by Sarjan AI Team
             </p>
+
           </div>
         </div>
+
       </div>
     </footer>
   );
