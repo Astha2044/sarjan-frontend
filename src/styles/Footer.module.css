@@ -30,12 +30,8 @@
 }
 
 @keyframes gridMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
 }
 
 /* ============================= */
@@ -60,8 +56,7 @@
 }
 
 @keyframes float {
-  0%,
-  100% {
+  0%, 100% {
     transform: translate(0, 0) scale(1);
     opacity: 0.3;
   }
@@ -125,15 +120,8 @@
 }
 
 @keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.1);
-  }
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 0.8; transform: scale(1.1); }
 }
 
 /* ============================= */
@@ -142,11 +130,17 @@
 
 .topBorder {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, #5eead4, transparent);
+  /* Same shimmer animation as header gradient-border */
+  animation: shimmer 3s linear infinite;
+  background-size: 1000px 100%;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
 /* ============================= */
@@ -163,9 +157,6 @@
 
 /* ============================= */
 /*  CONTENT GRID                 */
-/*  CHANGED: was 2-col (brand +  */
-/*  explore), now 3-col (brand + */
-/*  product + company)           */
 /* ============================= */
 
 .contentGrid {
@@ -183,7 +174,6 @@
 }
 
 @media (min-width: 1024px) {
-  /* 3 columns: brand takes more space, two link cols share the rest */
   .contentGrid {
     grid-template-columns: 1.6fr 1fr 1fr;
     gap: 4rem;
@@ -191,7 +181,7 @@
 }
 
 /* ============================= */
-/*  BRAND SECTION (UNCHANGED)    */
+/*  BRAND SECTION                */
 /* ============================= */
 
 .brandSection {
@@ -218,10 +208,11 @@
   transition: all 0.5s ease;
 }
 
+/* LOGO HOVER — matches header .logo-wrapper:hover */
 .logoContainer:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(94, 234, 212, 0.5);
-  box-shadow: 0 8px 32px rgba(94, 234, 212, 0.2);
+  box-shadow: 0 8px 20px rgba(94, 234, 212, 0.2);
   transform: translateY(-2px);
 }
 
@@ -257,7 +248,9 @@
 }
 
 /* ============================= */
-/*  SOCIAL LINKS (UNCHANGED)     */
+/*  SOCIAL LINKS                 */
+/*  Matches header .login-btn    */
+/*  hover style exactly          */
 /* ============================= */
 
 .socialLinks {
@@ -267,7 +260,6 @@
   align-items: center;
 }
 
-/* Icon Card */
 .socialButton {
   position: relative;
   width: 50px;
@@ -276,55 +268,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.02)
-  );
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: transform 0.35s ease, box-shadow 0.35s ease,
-    border-color 0.35s ease, background 0.35s ease;
   overflow: hidden;
   text-decoration: none;
+  /* Same transition timing as header buttons */
+  transition: all 0.3s ease;
 }
 
-/* ICON ITSELF */
+/* SOCIAL HOVER — matches header .login-btn:hover exactly */
+.socialButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(94, 234, 212, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(94, 234, 212, 0.25);
+}
+
 .socialIcon {
   font-size: 1.3rem;
   color: rgba(255, 255, 255, 0.7);
   z-index: 2;
-  transition: color 0.35s ease, transform 0.35s ease;
-}
-
-/* GLOW LAYER */
-.socialGlow {
-  position: absolute;
-  inset: -40%;
-  background: radial-gradient(
-    circle,
-    rgba(94, 234, 212, 0.35),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-/* SHINE GRADIENT */
-.socialGradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(94, 234, 212, 0.15), transparent);
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-/* HOVER EFFECT */
-.socialButton:hover {
-  transform: translateY(-6px) scale(1.05);
-  border-color: rgba(94, 234, 212, 0.6);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(94, 234, 212, 0.25);
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .socialButton:hover .socialIcon {
@@ -332,25 +298,36 @@
   transform: scale(1.15);
 }
 
+.socialGlow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle, rgba(94, 234, 212, 0.35), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.socialGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(94, 234, 212, 0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .socialButton:hover .socialGlow,
 .socialButton:hover .socialGradient {
   opacity: 1;
 }
 
-/* Per-platform hover colors (UNCHANGED) */
-.socialButton.telegram:hover .socialIcon  { color: white; }
+/* Per-platform colors on hover — same as header nav-link active */
+.socialButton.telegram:hover  .socialIcon { color: white; }
+.socialButton.twitter:hover   .socialIcon { color: white; }
 .socialButton.instagram:hover .socialIcon { color: white; }
-.socialButton.twitter:hover .socialIcon   { color: white; }
-.socialButton.github:hover .socialIcon    { color: white; }
-.socialButton.linkedin:hover .socialIcon  { color: white; }
+.socialButton.github:hover    .socialIcon { color: white; }
+.socialButton.linkedin:hover  .socialIcon { color: white; }
 
 /* ============================= */
 /*  LINK COLUMNS                 */
-/*  CHANGED: Replaced .simpleLinks*/
-/*  / .simpleHeading / .simpleList*/
-/*  with .linkColumn / .linkHeading*/
-/*  / .linkList which match your  */
-/*  existing linksGrid classes    */
 /* ============================= */
 
 .linkColumn {
@@ -364,7 +341,6 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  /* Using your existing teal gradient on headings */
   background: linear-gradient(135deg, #fff, #5eead4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -381,37 +357,55 @@
   gap: 0.75rem;
 }
 
+/* ============================= */
+/*  LINK HOVER                   */
+/*  Matches header .nav-link     */
+/*  hover exactly:               */
+/*  color teal + translateY(-2px)*/
+/*  + teal underline scaleX      */
+/* ============================= */
+
 .link {
   position: relative;
   display: inline-block;
   text-decoration: none;
   color: #94a3b8;
   font-size: 0.9375rem;
-  transition: color 0.3s ease;
+  font-weight: 500;
+  padding: 0.3rem 0;
+  /* Same transition as header nav-link */
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
-.link:hover {
-  color: #5eead4;
-}
-
-.linkUnderline {
+/* Teal underline — same as header nav-link::after */
+.link::after {
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0;
-  height: 1px;
-  background: #5eead4;
-  transition: width 0.3s ease;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #5eead4, transparent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
-.link:hover .linkUnderline {
-  width: 100%;
+/* Same hover as header .nav-link:hover */
+.link:hover {
+  color: #5eead4;
+  transform: translateY(-2px);
 }
+
+.link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Keep old .linkUnderline span for backwards compat — hidden now */
+.linkUnderline { display: none; }
 
 /* ============================= */
-/*  BADGE (NEW — for "NEW" tag   */
-/*  on Changelog link)           */
+/*  BADGE — "NEW" on Changelog   */
 /* ============================= */
 
 .linkBadge {
@@ -427,7 +421,6 @@
   padding: 2px 6px;
   vertical-align: middle;
   margin-left: 6px;
-  /* Override gradient text from parent .link */
   -webkit-text-fill-color: #5eead4;
 }
 
@@ -438,7 +431,6 @@
 .signatureSection {
   text-align: center;
   margin-bottom: 3rem;
-  padding: 0rem 0 0 0;
 }
 
 .signatureText {
@@ -466,7 +458,8 @@
 .signatureCharHovered {
   color: #90e4d8;
   -webkit-text-stroke: 0;
-  text-shadow: 0 0 20px rgba(94, 234, 212, 0.1),
+  text-shadow:
+    0 0 20px rgba(94, 234, 212, 0.1),
     0 0 40px rgba(94, 234, 212, 0.1),
     0 0 80px rgba(94, 234, 212, 0.1);
   transform: scale(1.08);
@@ -486,7 +479,7 @@
 }
 
 /* ============================= */
-/*  BOTTOM BAR (UNCHANGED)       */
+/*  BOTTOM BAR                   */
 /* ============================= */
 
 .bottomBar {
@@ -516,15 +509,36 @@
   white-space: nowrap;
 }
 
+/* BOTTOM LINKS HOVER — matches header .nav-link hover */
 .bottomLink {
+  position: relative;
   font-size: 0.875rem;
   color: #64748b;
   text-decoration: none;
-  transition: color 0.3s ease;
+  font-weight: 500;
+  padding: 0.2rem 0;
+  transition: all 0.3s ease;
+}
+
+.bottomLink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #5eead4, transparent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
 .bottomLink:hover {
   color: #5eead4;
+  transform: translateY(-2px);
+}
+
+.bottomLink:hover::after {
+  transform: scaleX(1);
 }
 
 .separator {
@@ -547,10 +561,9 @@
 }
 
 @keyframes heartbeat {
-  0%,
-  100% { transform: scale(1); }
-  25%   { transform: scale(1.2); }
-  50%   { transform: scale(1); }
+  0%, 100% { transform: scale(1); }
+  25%       { transform: scale(1.2); }
+  50%       { transform: scale(1); }
 }
 
 /* ============================= */
@@ -558,41 +571,23 @@
 /* ============================= */
 
 @media (max-width: 1024px) {
-  .contentGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-  /* Brand spans full width on tablet, links sit side by side below */
-  .brandSection {
-    grid-column: 1 / -1;
-  }
+  .contentGrid { grid-template-columns: 1fr 1fr; }
+  .brandSection { grid-column: 1 / -1; }
 }
 
 @media (max-width: 768px) {
-  .mainContent {
-    padding: 3rem 1.5rem 2rem;
-  }
-  .contentGrid {
-    grid-template-columns: 1fr;
-  }
-  .brandSection {
-    grid-column: auto;
-  }
+  .mainContent { padding: 3rem 1.5rem 2rem; }
+  .contentGrid { grid-template-columns: 1fr; }
+  .brandSection { grid-column: auto; }
   .bottomContent {
     flex-wrap: wrap;
     flex-direction: column;
     text-align: center;
   }
-  .signatureChar {
-    font-size: clamp(2.5rem, 10vw, 5rem);
-  }
+  .signatureChar { font-size: clamp(2.5rem, 10vw, 5rem); }
 }
 
 @media (max-width: 480px) {
-  .socialLinks {
-    gap: 0.5rem;
-  }
-  .socialButton {
-    width: 44px;
-    height: 44px;
-  }
+  .socialLinks { gap: 0.5rem; }
+  .socialButton { width: 44px; height: 44px; }
 }
