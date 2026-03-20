@@ -93,7 +93,7 @@ const LoginModal = ({ open, onClose, onOpenRegister, onOpenForgotPassword }) => 
         {
           theme: "outline",
           size: "large",
-          width: "100%",
+          width: 360,   // must be a number, matches max-width above
         }
       );
     }
@@ -187,7 +187,10 @@ const LoginModal = ({ open, onClose, onOpenRegister, onOpenForgotPassword }) => 
           </div>
 
           {/* ✅ Google Button */}
-          <div id="googleLoginBtn" style={{ width: "100%", minWidth: "300px" }}></div>
+          <div
+            id="googleLoginBtn"
+            className={styles.googleBtnWrapper}
+          ></div>
 
           {/* Switch */}
           <div className={styles.switchAuth}>
