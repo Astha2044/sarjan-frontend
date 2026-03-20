@@ -187,7 +187,7 @@ const LoginModal = ({ open, onClose, onOpenRegister, onOpenForgotPassword }) => 
           </div>
 
           {/* ✅ Google Button */}
-          <div id="googleLoginBtn" style={{ width: "100%" }}></div>
+          <div id="googleLoginBtn" style={{ width: "100%", minWidth: "300px" }}></div>
 
           {/* Switch */}
           <div className={styles.switchAuth}>
