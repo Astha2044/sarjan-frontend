@@ -5,6 +5,7 @@ import styles from "../../styles/Header.module.css";
 
 import RegisterModal from "../auth/RegisterModal";
 import LoginModal from "../auth/LoginModal";
+import ForgotPasswordModal from "../auth/ForgotPasswordModal";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -12,6 +13,7 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  const [openForgotPassword, setOpenForgotPassword] = useState(false);
   const headerRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
@@ -194,6 +196,11 @@ const Header = () => {
         open={openLogin}
         onClose={() => setOpenLogin(false)}
         onOpenRegister={() => setOpenRegister(true)}
+        onOpenForgotPassword={() => setOpenForgotPassword(true)}
+      />
+      <ForgotPasswordModal
+        open={openForgotPassword}
+        onClose={() => setOpenForgotPassword(false)}
       />
     </header>
   );

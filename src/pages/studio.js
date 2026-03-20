@@ -36,8 +36,47 @@ export default function Studio() {
   const activeChat = chats.find((c) => c._id === activeChatId);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchChats();
+    const handleAuth = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+
+      if (token) {
+        try {
+          // Fetch full user profile
+          const res = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/verify`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          if (res.data.status === "success") {
+            const userData = { ...res.data.data, token };
+            localStorage.setItem("user", JSON.stringify(userData));
+          }
+        } catch (error) {
+          console.error("Failed to verify token:", error);
+        }
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      const userStr = localStorage.getItem("user");
+      if (!userStr) {
+        window.location.href = "/";
+        return;
+      }
+
+      const user = JSON.parse(userStr);
+      if (!user || !user.token) {
+        window.location.href = "/";
+        return;
+      }
+
+      await fetchChats();
+    };
+
+    handleAuth();
   }, []);
 
   return (

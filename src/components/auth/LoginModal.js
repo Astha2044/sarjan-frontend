@@ -5,9 +5,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import styles from "../../styles/Register.module.css";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 
-const LoginModal = ({ open, onClose, onOpenRegister }) => {
+const LoginModal = ({ open, onClose, onOpenRegister, onOpenForgotPassword }) => {
   const router = useRouter();
 
   const {
@@ -66,6 +66,36 @@ useEffect(() => {
 
   if (!open) return null;
 
+  const handleGoogleLogin = () => {
+    if (!window.google) {
+      toast.error("Google login is currently unavailable. Please refresh.");
+      return;
+    }
+
+    window.google.accounts.id.initialize({
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      callback: async (response) => {
+        try {
+          const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/google/verify`,
+            { idToken: response.credential }
+          );
+
+          if (res.data?.status === 'success') {
+            localStorage.setItem("user", JSON.stringify(res.data?.data));
+            toast.success("Login successful 🚀");
+            onClose();
+            router.push("/studio");
+          }
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Google Login failed");
+        }
+      },
+    });
+
+    window.google.accounts.id.prompt();
+  };
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -114,10 +144,40 @@ useEffect(() => {
             {errors.password && <p>{errors.password.message}</p>}
           </div>
 
+          <div className={styles.forgotPassword}>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                // We will add onOpenForgotPassword prop later
+                if (typeof onOpenForgotPassword === 'function') {
+                    onOpenForgotPassword();
+                } else {
+                    toast.info("Forgot password feature coming soon!");
+                }
+              }}
+            >
+              Forgot Password?
+            </button>
+          </div>
+
           <button disabled={isSubmitting} className={styles.submitBtn}>
             {isSubmitting ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <div className={styles.divider}>
+          <span>OR</span>
+        </div>
+
+        <button 
+          type="button"
+          className={styles.googleBtn}
+          onClick={handleGoogleLogin}
+        >
+          <FaGoogle style={{ marginRight: '10px' }} /> Continue with Google
+        </button>
+
         <div className={styles.switchAuth}>
           <span>Don’t have an account?</span>
           <button
