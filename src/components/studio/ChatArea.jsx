@@ -128,11 +128,18 @@ export default function ChatArea({
         if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
           const currentThoughts = lastMsg.thoughts || [];
           let stepTitle = step;
-          if (step === "ideas") stepTitle = "Generating Ideas";
-          if (step === "critiques") stepTitle = "Critiquing Content";
-          if (step === "refined_ideas") stepTitle = "Refining Output";
-          if (step === "final_output") stepTitle = "Finalizing";
-          if (step === "image_gen") stepTitle = "Creating Image";
+          const mappings = {
+            idea_agent: "Conceptualizing",
+            ideas: "Brainstorming Ideas",
+            critic_agent: "Evaluating Concepts",
+            critiques: "Selecting Best Direction",
+            refiner_agent: "Polishing Response",
+            refined_ideas: "Finalizing Draft",
+            presenter_agent: "Formatting Report",
+            final_output: "Delivering",
+            image_gen: "Generating Visuals",
+          };
+          if (mappings[step]) stepTitle = mappings[step];
 
           const newThought = { step: stepTitle, content: content };
           const updatedMsg = {
@@ -155,7 +162,6 @@ export default function ChatArea({
           ? { ...prev, data: { ...prev.data, messages: newMsgList } }
           : { ...prev, messages: newMsgList };
       });
-      setLoading(false);
     };
 
     const handleResponseReady = (response) => {
@@ -255,6 +261,26 @@ export default function ChatArea({
     );
   };
 
+  const handleDownload = async (url) => {
+    if (!url) return;
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `sarjan-ai-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("Download failed:", err);
+      // Fallback
+      window.open(url, "_blank");
+    }
+  };
+
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -274,10 +300,17 @@ export default function ChatArea({
     sendMessage(editInput);
   };
 
+  const stopGeneration = () => {
+    if (!activeChatId || !socketRef.current) return;
+    console.log("🛑 Requesting to stop generation for:", activeChatId);
+    socketRef.current.emit("stop_generation", { conversationId: activeChatId });
+    setLoading(false);
+    clearResponseTimeout();
+  };
+
   const handleEditCancel = () => {
     setEditingIndex(null);
     setEditInput("");
-    setTimeout(() => setEditingIndex(null), 0);
   };
 
   const sendMessage = async (textOverride = null) => {
@@ -418,7 +451,10 @@ export default function ChatArea({
       try {
         const parsed = JSON.parse(pending);
         if (parsed?.message) {
-          setInput(parsed.message);
+          // 🔥 Automatically send the message
+          setTimeout(() => {
+            sendMessage(parsed.message);
+          }, 500);
         }
         localStorage.removeItem("pending_prompt");
       } catch (err) {
@@ -635,31 +671,44 @@ export default function ChatArea({
                             alt="Generated"
                             className={styles.generatedImg}
                           />
-                          
-                           <a href={msg.imageUrl}
-                            download
-                            target="_blank"
-                            rel="noreferrer"
+                          <button
+                            onClick={() => handleDownload(msg.imageUrl)}
                             className={styles.downloadBtn}
                           >
                             ⬇ Download
-                          </a>
+                          </button>
                         </div>
                       ) : (
-                        // The response is markdown, so we handle it gracefully here:
-                        <ReactMarkdown 
+                        <ReactMarkdown
                           components={{
-                            img: ({node, ...props}) => (
+                            img: ({ node, ...props }) => (
                               <div className={styles.generatedImgWrapper}>
-                                <img {...props} alt={props.alt || "Generated Output"} className={styles.generatedImg} />
-                                <a href={props.src} download="generated-image.jpg" target="_blank" rel="noreferrer" className={styles.downloadBtn}>
+                                <img
+                                  {...props}
+                                  alt={props.alt || "Generated Output"}
+                                  className={styles.generatedImg}
+                                />
+                                <button
+                                  onClick={() => handleDownload(props.src)}
+                                  className={styles.downloadBtn}
+                                >
                                   ⬇ Download
-                                </a>
+                                </button>
                               </div>
-                            )
+                            ),
                           }}
                         >
-                          {msg.content || msg.text}
+                          {/* 🔥 User wants "image only". If msg contains image, we filter text */}
+                          {(() => {
+                            const content = msg.content || msg.text || "";
+                            const hasImage = content.includes("![");
+                            if (hasImage) {
+                              // Extract only the first image markdown
+                              const match = content.match(/!\[.*?\]\(.*?\)/);
+                              if (match) return match[0];
+                            }
+                            return content;
+                          })()}
                         </ReactMarkdown>
                       )}
                       {!msg.isThinking && (
@@ -715,7 +764,15 @@ export default function ChatArea({
           📎
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </label>
-        <button onClick={sendMessage}>Send</button>
+        {loading ? (
+          <button onClick={stopGeneration} className={styles.stopBtn}>
+            Stop
+          </button>
+        ) : (
+          <button onClick={sendMessage} disabled={loading}>
+            Send
+          </button>
+        )}
       </div>
     </div>
   );

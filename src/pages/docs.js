@@ -18,79 +18,76 @@ const sections = [
   {
     icon: HiOutlineRocketLaunch,
     title: "Getting Started",
-    desc: "Install, authenticate, and make your first API call in under 5 minutes.",
+    desc: "Authenticate and start your first creative reasoning session in seconds.",
     tag: "Beginner",
-    topics: ["Quick Start Guide", "Installation", "Your First Request", "Response Format"],
+    topics: ["Authentication Flow", "The Studio Workspace", "Your First Prompt", "Response Types"],
   },
   {
     icon: HiOutlineKey,
     title: "Authentication",
-    desc: "Manage API keys, set permissions, and keep your credentials secure.",
+    desc: "Using Google Identity Services and JWT for secure, decentralized access.",
     tag: "Beginner",
-    topics: ["API Keys", "OAuth 2.0", "Key Rotation", "Rate Limits"],
+    topics: ["Google One Tap", "JWT Sessions", "Token Persistence", "Secure Routes"],
+  },
+  {
+    icon: HiOutlineCpuChip,
+    title: "6-Step Reasoning Flow",
+    desc: "The core architecture that transforms intent into intelligent output.",
+    tag: "Core",
+    topics: ["Input Signal", "Context Analysis", "Idea Expansion", "Reasoning Layer", "Refinement Loop", "Final Output"],
   },
   {
     icon: HiOutlineCommandLine,
     title: "API Reference",
-    desc: "Full reference for every endpoint, parameter, and response object.",
+    desc: "Direct access to the Sarjan AI reasoning and generation endpoints.",
     tag: "Reference",
-    topics: ["POST /generate", "GET /status", "POST /agents", "Webhooks"],
-  },
-  {
-    icon: HiOutlineCpuChip,
-    title: "Multi-Agent System",
-    desc: "Learn how specialized agents collaborate to produce better outputs.",
-    tag: "Core",
-    topics: ["Agent Architecture", "Agent Types", "Orchestration", "Custom Agents"],
+    topics: ["POST /api/chat/message", "GET /api/chat/history", "GET /api/auth/verify"],
   },
   {
     icon: HiOutlineBeaker,
-    title: "Prompt Engineering",
-    desc: "Write better prompts to get more accurate, creative, and consistent results.",
-    tag: "Guide",
-    topics: ["Prompt Structure", "System Prompts", "Few-Shot Examples", "Chain of Thought"],
+    title: "Multi-Agent Collaboration",
+    desc: "How specialized agents work together to refine and critique every idea.",
+    tag: "Core",
+    topics: ["Agent Orchestration", "Critique Loops", "Output Polishing", "Custom Pipelines"],
   },
   {
     icon: HiOutlineChartBar,
-    title: "Analytics & Usage",
-    desc: "Track your usage, monitor costs, and analyse output quality over time.",
+    title: "Studio Analytics",
+    desc: "Monitor your creative generation cycles and historical conversation trends.",
     tag: "Guide",
-    topics: ["Usage Dashboard", "Cost Tracking", "Output Quality Metrics", "Exports"],
+    topics: ["History Tracking", "Usage Metadata", "Token Consumption", "Exporting Chats"],
   },
   {
     icon: HiOutlineShieldCheck,
-    title: "Security & Compliance",
-    desc: "Data handling, privacy controls, and enterprise compliance information.",
+    title: "Security & Privacy",
+    desc: "How we protect your creative intent and ensure data integrity.",
     tag: "Enterprise",
-    topics: ["Data Retention", "Encryption", "GDPR Compliance", "Audit Logs"],
+    topics: ["JWT Encryption", "Google Auth Security", "Data Persistence", "Audit Trails"],
   },
   {
     icon: HiOutlineCodeBracket,
-    title: "SDKs & Libraries",
-    desc: "Native libraries for JavaScript, Python, and more — coming soon.",
+    title: "Developer Tools",
+    desc: "Resources for building on top of the Sarjan AI reasoning engine.",
     tag: "Developer",
-    topics: ["JavaScript SDK", "Python SDK", "REST Client", "Code Examples"],
+    topics: ["Direct API Access", "Webhook Integration", "Prompt Versioning", "Metadata Tags"],
   },
 ];
 
-const codeExample = `// Install via npm
-npm install @sarjanai/sdk
-
-// Initialize the client
-import SarjanAI from '@sarjanai/sdk';
-
-const client = new SarjanAI({
-  apiKey: process.env.SARJAN_API_KEY,
+const codeExample = `// Direct API Call Example
+const response = await fetch('/api/chat/message', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    prompt: "I want to design a modern landing page.",
+    conversationId: "optional_id"
+  })
 });
 
-// Make your first request
-const result = await client.generate({
-  prompt: "Write a product description for...",
-  agents: ["writer", "editor"],
-  mode: "polished",
-});
-
-console.log(result.output);`;
+const result = await response.json();
+console.log(result.data.messages);`;
 
 const tagColors = {
   Beginner:   styles.tagBeginner,

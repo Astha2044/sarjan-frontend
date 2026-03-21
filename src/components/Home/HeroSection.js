@@ -1,8 +1,10 @@
 /* HeroSection.js */
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../styles/Home.module.css";
+import { useRouter } from "next/router";
 
 const HeroSection = ({ onRequireLogin }) => {
+  const router = useRouter();
   const [inputValue, setInputValue] = useState("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorVariant, setCursorVariant] = useState("default");
@@ -133,7 +135,8 @@ const HeroSection = ({ onRequireLogin }) => {
     if (!inputValue.trim()) return;
 
     // 🔐 Check login
-    const user = localStorage.getItem("user");
+    const userStr = localStorage.getItem("user");
+    const user = userStr ? JSON.parse(userStr) : null;
 
     // 📝 Save message temporarily
     localStorage.setItem(
@@ -146,14 +149,14 @@ const HeroSection = ({ onRequireLogin }) => {
 
     setInputValue("");
 
-    // ❌ If not logged in → open login modal
-    if (!user) {
-      onRequireLogin(); // 🔥 open login modal
+    // ❌ If not logged in → redirect via prop
+    if (!user || !user.token) {
+      onRequireLogin(); 
       return;
     }
 
-    // ✅ If logged in → later redirect / process
-    console.log("User logged in, continue flow");
+    // ✅ If logged in → Redirect to studio
+    router.push("/studio");
   };
 
   const handleKeyPress = (e) => {

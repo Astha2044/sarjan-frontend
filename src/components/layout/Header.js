@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../styles/Header.module.css";
+import Link from "next/link";
 
 import RegisterModal from "../auth/RegisterModal";
 import LoginModal from "../auth/LoginModal";
@@ -75,7 +76,7 @@ const Header = () => {
 
       <div className={styles["header-container"]}>
         {/* Logo */}
-        <a href="/" className={styles["logo-link"]}>
+        <Link href="/" className={styles["logo-link"]}>
           <div className={styles["logo-wrapper"]}>
             <img
               src="/images/sarjan.png"
@@ -83,7 +84,7 @@ const Header = () => {
               className={styles.logoImage}
             />
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className={`${styles.nav} ${styles["desktop-nav"]}`}>
@@ -91,16 +92,16 @@ const Header = () => {
             const slug = toSlug(item);
 
             return (
-              <a
+              <Link
                 key={item}
-                href={`#${slug}`}
+                href={`/#${slug}`}
                 onClick={() => setActiveNav(item)}
                 className={`${styles["nav-link"]} ${
                   activeNav === item ? styles["nav-link-active"] : ""
                 }`}
               >
                 {item}
-              </a>
+              </Link>
             );
           })}
         </nav>
@@ -150,9 +151,9 @@ const Header = () => {
             const slug = toSlug(item);
 
             return (
-              <a
+              <Link
                 key={item}
-                href={`#${slug}`}
+                href={`/#${slug}`}
                 className={styles["mobile-nav-link"]}
                 onClick={() => {
                   setActiveNav(item); // ✅ active set
@@ -160,7 +161,7 @@ const Header = () => {
                 }}
               >
                 {item}
-              </a>
+              </Link>
             );
           })}
         </nav>

@@ -1,6 +1,7 @@
 // Footer.js
 import React, { useState } from "react";
 import styles from "../../styles/Footer.module.css";
+import Link from "next/link";
 import {
   FaTelegramPlane,
   FaInstagram,
@@ -13,21 +14,21 @@ const Footer = () => {
   const [hoveredChar, setHoveredChar] = useState(null);
   const year = new Date().getFullYear();
 
-  
+
   const productLinks = [
-    { label: "Features",  href: "/features",  badge: null  },
-    { label: "Pricing",   href: "/pricing",   badge: null  },
+    { label: "Features", href: "/features", badge: null },
+    { label: "Pricing", href: "/pricing", badge: null },
     // { label: "Changelog", href: "/changelog", badge: "NEW" },
-    { label: "Roadmap",   href: "/roadmap",   badge: null  },
-    { label: "Docs",      href: "/docs",      badge: null  },
+    { label: "Roadmap", href: "/roadmap", badge: null },
+    { label: "Docs", href: "/docs", badge: null },
   ];
 
-  
+
   const companyLinks = [
-    { label: "About Us", href: "/about"   },
-    { label: "Blog",     href: "/blog"    },
-    { label: "Careers",  href: "/careers" },
-    { label: "Contact",  href: "/contact" },
+    { label: "About Us", href: "/about" },
+    { label: "Blog", href: "/blog" },
+    { label: "Careers", href: "/careers" },
+    { label: "Contact", href: "/contact" },
   ];
 
   // ─────────────────────────────────────────────────────────
@@ -35,11 +36,11 @@ const Footer = () => {
   // → Replace the href values with your actual profile URLs
   // ─────────────────────────────────────────────────────────
   const socialLinks = [
-    { label: "Telegram",  href: "https://t.me/yourhandle",                 icon: FaTelegramPlane, cls: styles.telegram  },
-    { label: "Twitter",   href: "https://twitter.com/yourhandle",          icon: FaTwitter,       cls: styles.twitter   },
-    { label: "Instagram", href: "https://instagram.com/yourhandle",        icon: FaInstagram,     cls: styles.instagram },
-    { label: "GitHub",    href: "https://github.com/yourhandle",           icon: FaGithub,        cls: styles.github    },
-    { label: "LinkedIn",  href: "https://linkedin.com/company/yourhandle", icon: FaLinkedin,      cls: styles.linkedin  },
+    { label: "Telegram", href: "https://t.me/yourhandle", icon: FaTelegramPlane, cls: styles.telegram },
+    { label: "Twitter", href: "https://twitter.com/yourhandle", icon: FaTwitter, cls: styles.twitter },
+    { label: "Instagram", href: "https://instagram.com/yourhandle", icon: FaInstagram, cls: styles.instagram },
+    { label: "GitHub", href: "https://github.com/yourhandle", icon: FaGithub, cls: styles.github },
+    { label: "LinkedIn", href: "https://linkedin.com/company/yourhandle", icon: FaLinkedin, cls: styles.linkedin },
   ];
 
   return (
@@ -74,12 +75,12 @@ const Footer = () => {
 
           {/* LEFT — BRAND */}
           <div className={styles.brandSection}>
-            <div className={styles.logoWrapper}>
+            <Link href="/" className={styles.logoWrapper}>
               <div className={styles.logoContainer}>
                 <div className={styles.logoGlow} />
                 <span className={styles.logoText}>SARJAN AI</span>
               </div>
-            </div>
+            </Link>
 
             <p className={styles.brandTagline}>
               Where ideas think together. Empowering innovation through
@@ -111,13 +112,13 @@ const Footer = () => {
             <ul className={styles.linkList}>
               {productLinks.map(({ label, href, badge }) => (
                 <li key={label}>
-                  <a href={href} className={styles.link}>
+                  <Link href={href} className={styles.link}>
                     {label}
                     {badge && (
                       <span className={styles.linkBadge}>{badge}</span>
                     )}
                     <span className={styles.linkUnderline} />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -129,10 +130,10 @@ const Footer = () => {
             <ul className={styles.linkList}>
               {companyLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <a href={href} className={styles.link}>
+                  <Link href={href} className={styles.link}>
                     {label}
                     <span className={styles.linkUnderline} />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -146,9 +147,8 @@ const Footer = () => {
             {["S", "A", "R", "J", "A", "N"].map((char, i) => (
               <span
                 key={i}
-                className={`${styles.signatureChar} ${
-                  hoveredChar === i ? styles.signatureCharHovered : ""
-                }`}
+                className={`${styles.signatureChar} ${hoveredChar === i ? styles.signatureCharHovered : ""
+                  }`}
                 onMouseEnter={() => setHoveredChar(i)}
                 onMouseLeave={() => setHoveredChar(null)}
               >
@@ -169,14 +169,14 @@ const Footer = () => {
 
             <div className={styles.bottomLinks}>
               {/* ✅ Clickable → create pages/privacy.js to activate */}
-              <a href="/privacy" className={styles.bottomLink}>
+              <Link href="/privacy" className={styles.bottomLink}>
                 Privacy Policy
-              </a>
+              </Link>
               <span className={styles.separator}>•</span>
               {/* ✅ Clickable → create pages/terms.js to activate */}
-              <a href="/terms" className={styles.bottomLink}>
+              <Link href="/terms" className={styles.bottomLink}>
                 Terms of Service
-              </a>
+              </Link>
             </div>
 
             <p className={styles.madeWith}>

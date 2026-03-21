@@ -8,9 +8,9 @@ const quarters = [
     status: "completed",
     label: "Completed",
     items: [
-      { icon: HiOutlineCheckCircle, title: "Multi-Agent Core Engine", desc: "Built and shipped the foundational multi-agent collaboration system powering all AI workflows." },
-      { icon: HiOutlineCheckCircle, title: "User Authentication & Accounts", desc: "Secure login, registration, and account management with JWT-based sessions." },
-      { icon: HiOutlineCheckCircle, title: "Basic API Access", desc: "REST API with authentication, rate limiting, and initial endpoint coverage." },
+      { icon: HiOutlineCheckCircle, title: "Multi-Agent Core Engine", desc: "Built the foundational multi-agent collaboration system powering the Sarjan reasoning pipeline." },
+      { icon: HiOutlineCheckCircle, title: "Google Identity Integration", desc: "Secure authentication using Google One Tap and Identity Services for a seamless login experience." },
+      { icon: HiOutlineCheckCircle, title: "Custom Styled UI", desc: "A premium, dark-mode interface with glassmorphism and perfectly centered, branded components." },
     ],
   },
   {
@@ -18,9 +18,9 @@ const quarters = [
     status: "completed",
     label: "Completed",
     items: [
-      { icon: HiOutlineCheckCircle, title: "Real-Time Output Streaming", desc: "AI responses now stream in real time — no more waiting for the full response to load." },
-      { icon: HiOutlineCheckCircle, title: "Analytics Dashboard", desc: "Track usage, generation count, and output quality from a clean dashboard." },
-      { icon: HiOutlineCheckCircle, title: "Custom Templates", desc: "Save and reuse your most-used prompts and workflows as personal templates." },
+      { icon: HiOutlineCheckCircle, title: "6-Step Reasoning Flow", desc: "Implemented the 'How Sarjan Thinks' pipeline: Context Analysis, Idea Expansion, and Refinement." },
+      { icon: HiOutlineCheckCircle, title: "Real-Time Message Persistence", desc: "Messages saved in the Studio automatically, allowing users to pick up exactly where they left off." },
+      { icon: HiOutlineCheckCircle, title: "Studio Dashboard", desc: "A clean, functional workspace for managing multiple AI conversations and generation history." },
     ],
   },
   {
@@ -28,9 +28,9 @@ const quarters = [
     status: "in-progress",
     label: "In Progress",
     items: [
-      { icon: HiOutlineClock, title: "Model Fine-Tuning (Enterprise)", desc: "Allow enterprise customers to fine-tune Sarjan AI on their own data and brand voice." },
-      { icon: HiOutlineClock, title: "Team Collaboration Features", desc: "Shared workspaces, team roles, and collaborative editing for AI-generated content." },
-      { icon: HiOutlineClock, title: "Advanced Reasoning Mode", desc: "A deeper thinking mode that breaks complex tasks into structured reasoning steps before output." },
+      { icon: HiOutlineClock, title: "Advanced Model Fine-Tuning", desc: "Allow users to fine-tune the Sarjan reasoning engine on their specific creative data." },
+      { icon: HiOutlineClock, title: "Collaborative Workspaces", desc: "Shared folders and real-time multiplayer editing for AI-generated projects." },
+      { icon: HiOutlineClock, title: "Refined Output Pipeline", desc: "Deeper analysis layers to ensure zero-hallucination and high-precision results." },
     ],
   },
   {

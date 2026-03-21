@@ -107,6 +107,7 @@
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
+
 .emptyTitle {
   font-size: 2rem;
   font-weight: 700;
@@ -521,10 +522,29 @@
   box-shadow: 0 4px 12px rgba(94, 234, 212, 0.3);
 }
 
-.inputBar button:hover {
+.inputBar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.stopBtn {
+  padding: 0 2rem;
+  height: 56px;
+  background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+  border: none;
+  border-radius: 1rem;
+  font-weight: 600;
+  color: #fff !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+}
+
+.stopBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(94, 234, 212, 0.5);
-  filter: brightness(1.1);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5) !important;
 }
 
 /* Image Preview */
@@ -672,6 +692,7 @@
   color: #ef4444;
   background: rgba(239, 68, 68, 0.05);
 }
+
 /* Upgrade limit banner */
 .upgradeBanner {
   display: flex;
@@ -755,7 +776,11 @@
   color: #5eead4;
   font-size: 0.85rem;
   text-decoration: none;
+  cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .downloadBtn:hover {

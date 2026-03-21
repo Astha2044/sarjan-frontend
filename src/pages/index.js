@@ -1,15 +1,17 @@
-/* eslint-disable @next/next/no-page-custom-font */
 import Head from "next/head";
 import SarjanAIHero from "@/components/Home/HeroSection";
 import FlowPage from "@/components/OurFlow/flow";
 import WhySarjanAI from "@/components/why choose us/about";
 import ExamplesSection from "@/components/Example/ExamplesSection";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import LoginModal from "@/components/auth/LoginModal";
+import RegisterModal from "@/components/auth/RegisterModal";
 
 export default function Home() {
-
+  const router = useRouter();
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   return (
     <>
@@ -33,14 +35,21 @@ export default function Home() {
         />
 
       </Head>
-      <SarjanAIHero  onRequireLogin={() => setShowLogin(true)}/>
+      <SarjanAIHero  onRequireLogin={() => router.push("/auth/login")}/>
       <FlowPage />
       <WhySarjanAI />
       <ExamplesSection />
-        <LoginModal
-        
+      
+      <LoginModal
         open={showLogin}
         onClose={() => setShowLogin(false)}
+        onOpenRegister={() => setShowRegister(true)}
+      />
+
+      <RegisterModal
+        open={showRegister}
+        onClose={() => setShowRegister(false)}
+        onOpenLogin={() => setShowLogin(true)}
       />
     </>
   );
