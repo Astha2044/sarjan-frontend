@@ -195,6 +195,22 @@ export default function ChatArea({
     const handleStop = () => {
       clearResponseTimeout();
       setLoading(false);
+      
+      setChatMessage((prev) => {
+        if (!prev) return prev;
+        const isNested = !!prev?.data?.messages;
+        const msgList = isNested ? prev.data.messages : prev?.messages || [];
+        if (msgList.length === 0) return prev;
+
+        const lastMsg = msgList[msgList.length - 1];
+        if (lastMsg.isThinking) {
+          const newMsgList = msgList.slice(0, -1);
+          return isNested
+            ? { ...prev, data: { ...prev.data, messages: newMsgList } }
+            : { ...prev, messages: newMsgList };
+        }
+        return prev;
+      });
     };
 
     const handleError = () => {
@@ -294,10 +310,56 @@ export default function ChatArea({
     setEditInput(content);
   };
 
-  const handleEditSave = () => {
+  const handleEditSave = async () => {
     if (!editInput.trim()) return;
+    const indexToEdit = editingIndex;
     setEditingIndex(null);
-    sendMessage(editInput);
+
+    const isNested = !!chatMessage?.data?.messages;
+    const msgs = isNested ? chatMessage.data.messages : chatMessage?.messages || [];
+    const targetMsg = msgs[indexToEdit];
+    const messageId = targetMsg?._id;
+
+    if (!messageId) {
+      console.error("Message ID not found for editing");
+      // Fallback to regular send if it's an unsaved local message
+      sendMessage(editInput);
+      return;
+    }
+
+    setLoading(true);
+
+    const updatedUserMsg = { ...targetMsg, content: editInput, text: editInput };
+    const optimisticAiMsg = {
+      role: "assistant",
+      content: "Thinking...",
+      thoughts: [],
+      isThinking: true,
+    };
+
+    setChatMessage((prev) => {
+      const isNested = !!prev?.data?.messages;
+      const msgs = isNested ? prev.data.messages : prev?.messages || [];
+      // Truncate everything after the edited message, and replace the edited message
+      const newMsgs = [...msgs.slice(0, indexToEdit), updatedUserMsg, optimisticAiMsg];
+      return isNested
+        ? { ...prev, data: { ...prev.data, messages: newMsgs } }
+        : { ...prev, messages: newMsgs };
+    });
+
+    try {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/chat/message/${messageId}`, {
+        prompt: editInput,
+        conversationId: activeChatId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('user'))?.token}`
+        }
+      });
+    } catch (error) {
+      console.error("Error editing message:", error);
+      setLoading(false);
+    }
   };
 
   const stopGeneration = () => {
@@ -306,6 +368,22 @@ export default function ChatArea({
     socketRef.current.emit("stop_generation", { conversationId: activeChatId });
     setLoading(false);
     clearResponseTimeout();
+
+    setChatMessage((prev) => {
+      if (!prev) return prev;
+      const isNested = !!prev?.data?.messages;
+      const msgList = isNested ? prev.data.messages : prev?.messages || [];
+      if (msgList.length === 0) return prev;
+
+      const lastMsg = msgList[msgList.length - 1];
+      if (lastMsg.isThinking) {
+        const newMsgList = msgList.slice(0, -1);
+        return isNested
+          ? { ...prev, data: { ...prev.data, messages: newMsgList } }
+          : { ...prev, messages: newMsgList };
+      }
+      return prev;
+    });
   };
 
   const handleEditCancel = () => {

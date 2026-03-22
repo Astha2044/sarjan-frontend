@@ -577,17 +577,23 @@
 
 @media (max-width: 768px) {
   .mainContent { padding: 3rem 1.5rem 2rem; }
-  .contentGrid { grid-template-columns: 1fr; }
-  .brandSection { grid-column: auto; }
+  .contentGrid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .brandSection { grid-column: auto; align-items: center; text-align: center; }
+  .socialLinks { justify-content: center; }
+  .linkColumn { align-items: center; text-align: center; }
   .bottomContent {
     flex-wrap: wrap;
     flex-direction: column;
     text-align: center;
+    gap: 1.5rem;
   }
+  .bottomLinks { flex-wrap: wrap; justify-content: center; }
   .signatureChar { font-size: clamp(2.5rem, 10vw, 5rem); }
 }
 
 @media (max-width: 480px) {
   .socialLinks { gap: 0.5rem; }
-  .socialButton { width: 44px; height: 44px; }
+  .socialButton { width: 40px; height: 40px; }
+  .bottomLinks { flex-direction: column; gap: 0.5rem; }
+  .separator { display: none; }
 }

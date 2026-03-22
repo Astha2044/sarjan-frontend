@@ -35,11 +35,11 @@ export default function Home() {
         />
 
       </Head>
-      <SarjanAIHero  onRequireLogin={() => router.push("/auth/login")}/>
+      <SarjanAIHero onRequireLogin={() => router.push("/auth/login")} />
       <FlowPage />
       <WhySarjanAI />
       <ExamplesSection />
-      
+
       <LoginModal
         open={showLogin}
         onClose={() => setShowLogin(false)}

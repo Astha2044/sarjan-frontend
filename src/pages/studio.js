@@ -33,6 +33,27 @@ export default function Studio() {
     setSidebarOpen(false); //  close sidebar on mobile
   };
 
+  const deleteChat = async (e, id) => {
+    e.stopPropagation();
+    const user = JSON.parse(localStorage.getItem("user"));
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/chat/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      if (activeChatId === id) {
+        setActiveChatId(null);
+      }
+      fetchChats();
+    } catch (error) {
+      console.error("Failed to delete chat", error);
+    }
+  };
+
   const activeChat = chats.find((c) => c._id === activeChatId);
 
   useEffect(() => {
@@ -96,6 +117,7 @@ export default function Studio() {
         activeChat={activeChatId}
         setActiveChat={handleChatSelect}
         onNewChat={createNewChat}
+        onDeleteChat={deleteChat}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
