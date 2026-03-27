@@ -53,11 +53,9 @@
   position: fixed;
   width: 200px;
   height: 200px;
-  background: radial-gradient(
-    circle,
-    rgba(94, 234, 212, 0.15),
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      rgba(94, 234, 212, 0.15),
+      transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
@@ -106,11 +104,9 @@
   position: absolute;
   width: 500px;
   height: 500px;
-  background: radial-gradient(
-    circle,
-    rgba(168, 85, 247, 0.15),
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15),
+      transparent 70%);
   border-radius: 50%;
   bottom: -150px;
   right: -150px;
@@ -122,11 +118,9 @@
   position: absolute;
   width: 400px;
   height: 400px;
-  background: radial-gradient(
-    circle,
-    rgba(59, 130, 246, 0.12),
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      rgba(59, 130, 246, 0.12),
+      transparent 70%);
   border-radius: 50%;
   top: 50%;
   left: 50%;
@@ -136,30 +130,36 @@
 }
 
 @keyframes orbFloat1 {
+
   0%,
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(50px, 50px) scale(1.1);
   }
 }
 
 @keyframes orbFloat2 {
+
   0%,
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(-50px, -50px) scale(1.15);
   }
 }
 
 @keyframes orbFloat3 {
+
   0%,
   100% {
     transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
     transform: translate(-40%, -40%) scale(1.2);
   }
@@ -196,6 +196,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -227,10 +228,12 @@
 }
 
 @keyframes logoGlow {
+
   0%,
   100% {
     filter: drop-shadow(0 0 20px rgba(94, 234, 212, 0.6));
   }
+
   50% {
     filter: drop-shadow(0 0 30px rgba(94, 234, 212, 0.9));
   }
@@ -246,11 +249,13 @@
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 0.5;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.2);
@@ -341,6 +346,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -402,6 +408,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -499,12 +506,14 @@
 }
 
 @keyframes typingBounce {
+
   0%,
   60%,
   100% {
     transform: translateY(0);
     opacity: 0.7;
   }
+
   30% {
     transform: translateY(-10px);
     opacity: 1;
@@ -713,6 +722,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -781,11 +791,13 @@
 }
 
 @keyframes scrollAnim {
+
   0%,
   100% {
     transform: translate(-50%, 0);
     opacity: 1;
   }
+
   50% {
     transform: translate(-50%, 12px);
     opacity: 0.3;
@@ -965,11 +977,9 @@
 .gradientOrb1 {
   width: 600px;
   height: 600px;
-  background: radial-gradient(
-    circle,
-    rgba(94, 234, 212, 0.15),
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      rgba(94, 234, 212, 0.15),
+      transparent 70%);
   top: -200px;
   left: -200px;
   animation: orbFloat1 20s ease-in-out infinite;
@@ -978,11 +988,9 @@
 .gradientOrb2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(
-    circle,
-    rgba(168, 85, 247, 0.12),
-    transparent 70%
-  );
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.12),
+      transparent 70%);
   bottom: -150px;
   right: -150px;
   animation: orbFloat2 25s ease-in-out infinite;
@@ -1030,11 +1038,11 @@
 }
 
 .headingLine {
-  fontsize: 1.25rem;
-  fontweight: 400;
+  font-size: 1.25rem;
+  font-weight: 400;
   color: #94a3b8;
-  letterspacing: 0.1em;
-  texttransform: uppercase;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   animation: fadeIn 1s ease 0.3s backwards;
 }
 
@@ -1199,6 +1207,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -1209,6 +1218,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1220,6 +1230,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1231,6 +1242,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -1238,30 +1250,36 @@
 }
 
 @keyframes orbFloat1 {
+
   0%,
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(50px, 50px) scale(1.1);
   }
 }
 
 @keyframes orbFloat2 {
+
   0%,
   100% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(-50px, -50px) scale(1.15);
   }
 }
 
 @keyframes orbFloat3 {
+
   0%,
   100% {
     transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
     transform: translate(-40%, -40%) scale(1.2);
   }
@@ -1276,9 +1294,74 @@
     padding: 1rem;
     cursor: auto;
   }
+
   .customCursor,
   .cursorGlow {
     display: none;
+  }
+
+  /* Fix heading width on mobile */
+  .brandName {
+    font-size: clamp(2rem, 10vw, 3rem);
+    letter-spacing: 0.15em;
+    gap: 0.25rem;
+  }
+
+  .sarjan {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+
+  .ai {
+    letter-spacing: 0.1em;
+    margin-left: 0.1em;
+    text-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
+  }
+
+  /* Fix chat input cut-off */
+  .chatInput {
+    padding: 0.75rem;
+    border-radius: 12px;
+  }
+
+  .inputWrapper {
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .input {
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+  }
+
+  .sendButton {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .inputHint {
+    font-size: 0.7rem;
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 0.75rem;
+  }
+
+  .brandName {
+    font-size: clamp(1.8rem, 12vw, 2.5rem);
+    letter-spacing: 0.1em;
+  }
+
+  .chatInput {
+    padding: 0.5rem;
+  }
+
+  .sendButton {
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -1286,7 +1369,8 @@
   font-family: "Inter", sans-serif;
   font-size: clamp(3rem, 7vw, 5rem);
   font-weight: 400;
-  letter-spacing: 0.28em; /* THIS creates logo look */
+  letter-spacing: 0.28em;
+  /* THIS creates logo look */
   display: flex;
   align-items: center;
   gap: 0.5rem;
