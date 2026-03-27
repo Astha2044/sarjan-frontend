@@ -192,6 +192,34 @@ export default function ChatArea({
       setLoading(false);
     };
 
+    const handleContentChunk = (data) => {
+      clearResponseTimeout();
+      const { chunk } = data;
+      setChatMessage((prev) => {
+        const isNested = !!prev?.data?.messages;
+        const msgList = isNested ? prev.data.messages : prev?.messages || [];
+        const lastMsg = msgList[msgList.length - 1];
+        let newMsgList = [...msgList];
+
+        if (lastMsg && (lastMsg.role === "assistant" || lastMsg.role === "ai")) {
+          const newContent = lastMsg.isThinking && lastMsg.content === "Thinking..." 
+            ? chunk 
+            : (lastMsg.content || "") + chunk;
+          
+          newMsgList[newMsgList.length - 1] = {
+            ...lastMsg,
+            content: newContent,
+            isThinking: false, // Switch to content view
+            streaming: true,   // Flag for smooth UI
+          };
+        }
+
+        return isNested
+          ? { ...prev, data: { ...prev.data, messages: newMsgList } }
+          : { ...prev, messages: newMsgList };
+      });
+    };
+
     const handleStop = () => {
       clearResponseTimeout();
       setLoading(false);
@@ -203,8 +231,11 @@ export default function ChatArea({
         if (msgList.length === 0) return prev;
 
         const lastMsg = msgList[msgList.length - 1];
-        if (lastMsg.isThinking) {
-          const newMsgList = msgList.slice(0, -1);
+        if (lastMsg.isThinking || lastMsg.streaming) {
+          const updatedMsg = { ...lastMsg, isThinking: false, streaming: false };
+          const newMsgList = [...msgList];
+          newMsgList[newMsgList.length - 1] = updatedMsg;
+          
           return isNested
             ? { ...prev, data: { ...prev.data, messages: newMsgList } }
             : { ...prev, messages: newMsgList };
@@ -219,6 +250,7 @@ export default function ChatArea({
     };
 
     socket.on("pipeline_step", handlePipelineStep);
+    socket.on("content_chunk", handleContentChunk);
     socket.on("response_ready", handleResponseReady);
     socket.on("generation_stopped", handleStop);
     socket.on("processing_error", handleError);
@@ -227,6 +259,7 @@ export default function ChatArea({
       console.log(`🔌 Leaving room: "${roomId}"`);
       socket.emit("leave", roomId);
       socket.off("pipeline_step", handlePipelineStep);
+      socket.off("content_chunk", handleContentChunk);
       socket.off("response_ready", handleResponseReady);
       socket.off("generation_stopped", handleStop);
       socket.off("processing_error", handleError);
@@ -740,54 +773,58 @@ export default function ChatArea({
                     </>
                   ) : (
                     <>
-                      {msg.isThinking && msg.thoughts ? (
+                      {msg.thoughts && msg.thoughts.length > 0 && (
                         <ThinkingBlock thoughts={msg.thoughts} />
-                      ) : msg.imageUrl ? (
-                        <div className={styles.generatedImgWrapper}>
-                          <img
-                            src={msg.imageUrl}
-                            alt="Generated"
-                            className={styles.generatedImg}
-                          />
-                          <button
-                            onClick={() => handleDownload(msg.imageUrl)}
-                            className={styles.downloadBtn}
+                      )}
+                      
+                      {msg.isThinking && (!msg.content || msg.content === "Thinking...") ? null : (
+                        msg.imageUrl ? (
+                          <div className={styles.generatedImgWrapper}>
+                            <img
+                              src={msg.imageUrl}
+                              alt="Generated"
+                              className={styles.generatedImg}
+                            />
+                            <button
+                              onClick={() => handleDownload(msg.imageUrl)}
+                              className={styles.downloadBtn}
+                            >
+                              ⬇ Download
+                            </button>
+                          </div>
+                        ) : (
+                          <ReactMarkdown
+                            components={{
+                              img: ({ node, ...props }) => (
+                                <div className={styles.generatedImgWrapper}>
+                                  <img
+                                    {...props}
+                                    alt={props.alt || "Generated Output"}
+                                    className={styles.generatedImg}
+                                  />
+                                  <button
+                                    onClick={() => handleDownload(props.src)}
+                                    className={styles.downloadBtn}
+                                  >
+                                    ⬇ Download
+                                  </button>
+                                </div>
+                              ),
+                            }}
                           >
-                            ⬇ Download
-                          </button>
-                        </div>
-                      ) : (
-                        <ReactMarkdown
-                          components={{
-                            img: ({ node, ...props }) => (
-                              <div className={styles.generatedImgWrapper}>
-                                <img
-                                  {...props}
-                                  alt={props.alt || "Generated Output"}
-                                  className={styles.generatedImg}
-                                />
-                                <button
-                                  onClick={() => handleDownload(props.src)}
-                                  className={styles.downloadBtn}
-                                >
-                                  ⬇ Download
-                                </button>
-                              </div>
-                            ),
-                          }}
-                        >
-                          {/* 🔥 User wants "image only". If msg contains image, we filter text */}
-                          {(() => {
-                            const content = msg.content || msg.text || "";
-                            const hasImage = content.includes("![");
-                            if (hasImage) {
-                              // Extract only the first image markdown
-                              const match = content.match(/!\[.*?\]\(.*?\)/);
-                              if (match) return match[0];
-                            }
-                            return content;
-                          })()}
-                        </ReactMarkdown>
+                            {/* 🔥 User wants "image only". If msg contains image, we filter text */}
+                            {(() => {
+                              const content = msg.content || msg.text || "";
+                              const hasImage = content.includes("![");
+                              if (hasImage) {
+                                // Extract only the first image markdown
+                                const match = content.match(/!\[.*?\]\(.*?\)/);
+                                if (match) return match[0];
+                              }
+                              return content;
+                            })()}
+                          </ReactMarkdown>
+                        )
                       )}
                       {!msg.isThinking && (
                         <div className={styles.messageActions}>
