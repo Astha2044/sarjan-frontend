@@ -417,38 +417,68 @@
   display: block;
 }
 
-/* Thinking Dropdown (Updated for new theme) */
-.thinkingWrapper {
-  margin-bottom: 0.5rem;
+.singleProcessTracker {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(94, 234, 212, 0.05);
+  border: 1px solid rgba(94, 234, 212, 0.2);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  animation: pulseIn 0.5s ease-out;
 }
 
-.thinkingToggle {
+@keyframes pulseIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.processStep {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(94, 234, 212, 0.05);
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
+  gap: 10px;
+  animation: slideAndFade 0.4s ease-out;
+}
+
+@keyframes slideAndFade {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(94, 234, 212, 0.2);
+  border-top-color: #5eead4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.activeStep {
+  font-size: 0.9rem;
+  font-weight: 500;
   color: #5eead4;
-  border: 1px solid rgba(94, 234, 212, 0.1);
-  transition: all 0.2s;
-}
-
-.thinkingToggle:hover {
-  background: rgba(94, 234, 212, 0.1);
-}
-
-.thinkingContent {
-  margin-top: 8px;
-  padding: 12px;
-  border-left: 2px solid rgba(94, 234, 212, 0.2);
-  margin-left: 4px;
-  font-size: 0.85rem;
-  color: #94a3b8;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 0 8px 8px 8px;
+  letter-spacing: 0.3px;
 }
 
 /* Input Area - Floating & Premium */

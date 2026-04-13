@@ -274,38 +274,18 @@ export default function ChatArea({
     }
   }, [activeChatId]);
 
-  const ThinkingBlock = ({ thoughts }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const lastThought = thoughts[thoughts.length - 1];
-    const displayStep = lastThought ? lastThought.step : "Thinking Process";
+  const ThinkingBlock = ({ thoughts, isThinking }) => {
+    if (!isThinking || thoughts.length === 0) return null;
+    const currentThought = thoughts[thoughts.length - 1];
 
     return (
-      <div className={styles.thinkingWrapper}>
-        <div
-          className={styles.thinkingToggle}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span
-            className={`${styles.thinkingChevron} ${isOpen ? styles.open : ""}`}
-          >
-            ▶
+      <div className={styles.singleProcessTracker}>
+        <div className={styles.processStep} key={currentThought.step}>
+          <span className={styles.spinner}></span>
+          <span className={styles.activeStep}>
+            {currentThought.step}...
           </span>
-          <span>{displayStep}...</span>
         </div>
-        {isOpen && (
-          <div className={styles.thinkingContent}>
-            {thoughts.map((t, idx) => (
-              <div key={idx} style={{ marginBottom: "8px" }}>
-                <strong>{t.step}:</strong>
-                <div style={{ marginTop: "4px", whiteSpace: "pre-wrap" }}>
-                  {typeof t.content === "string"
-                    ? t.content
-                    : JSON.stringify(t.content)}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     );
   };
@@ -516,7 +496,7 @@ export default function ChatArea({
         return;
       }
 
-      if (err.response?.data?.error === "image_restricted") {
+      if (err.response?.data?.error === "upgrade_required" || err.response?.data?.error === "image_restricted") {
         setImageRestrictedMsg(true);
         setLoading(false);
         clearResponseTimeout();
@@ -774,7 +754,7 @@ export default function ChatArea({
                   ) : (
                     <>
                       {msg.thoughts && msg.thoughts.length > 0 && (
-                        <ThinkingBlock thoughts={msg.thoughts} />
+                        <ThinkingBlock thoughts={msg.thoughts} isThinking={msg.isThinking} />
                       )}
                       
                       {msg.isThinking && (!msg.content || msg.content === "Thinking...") ? null : (
